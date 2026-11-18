@@ -174,6 +174,8 @@ async function copyDir(from, to) {
   }
   await fs.mkdir(to, { recursive: true });
   for (const entry of entries) {
+    // 跳过 .gitkeep 这类占位文件，别把它们发到线上
+    if (entry.name.startsWith('.')) continue;
     const src = p(from, entry.name);
     const dest = p(to, entry.name);
     if (entry.isDirectory()) {
