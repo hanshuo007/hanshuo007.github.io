@@ -103,7 +103,9 @@ tags: [公告]
 
 ## 四、上线
 
-站点已经上线：**https://dadaohuifu.netlify.app**（Netlify 免费计划）。
+站点已经上线：**https://hanshuo007.github.io**（GitHub Pages，免费、无水印）。
+
+同一次 push 还会同步发布一份到 Netlify 作为镜像：<https://dadaohuifu.netlify.app>（那份带“Powered by Netlify”角标，是免费计划的强制项，删不掉，只当备用线路）。
 
 ### 改了内容怎么发上去
 
@@ -127,8 +129,9 @@ NETLIFY_TOKEN=你的token node scripts/netlify-deploy.mjs dadaohuifu
 完整步骤在 `docs/域名与部署指南.md`（Netlify 版）：选域名、在哪注册、要不要备案、DNS 记录填什么、出问题怎么查。最短路径：
 
 1. 买域名（阿里云 / 腾讯云 / Cloudflare Registrar 都行）。
-2. Netlify 项目 → `Domain management → Add a domain`，填你的域名。
-3. 按面板显示的值加 DNS 记录（根域名一条 A、www 一条 CNAME，值必须照抄面板）。
+2. 仓库 **Settings → Pages → Custom domain** 填你的域名。
+3. 到域名注册商处按官方要求加 DNS 记录（根域名 A 记录、www 的 CNAME → `hanshuo007.github.io`），具体值以 GitHub 文档/设置页提示为准，别抄二手博客。
+4. 等证书签发后勾上 **Enforce HTTPS**。
 
 换好域名后回到 `site.config.mjs` 把 `site.url` 改成 `https://你的域名`，重建并重新部署一次（RSS 与 sitemap 用的是绝对地址）。
 
