@@ -109,7 +109,7 @@ tags: [公告]
 
 ```
 node build.mjs
-NETLIFY_TOKEN=你的token node _tools/netlify-deploy.mjs dadaohuifu
+NETLIFY_TOKEN=你的token node scripts/netlify-deploy.mjs dadaohuifu
 ```
 
 脚本会自己建站（已存在就复用）、用零依赖打包器压缩 `dist`、上传、等到部署完成，然后打印地址。Token 在 Netlify 的 `User settings → Applications → Personal access tokens` 里生成。
@@ -127,7 +127,7 @@ NETLIFY_TOKEN=你的token node _tools/netlify-deploy.mjs dadaohuifu
 ### 两个踩过的坑（别再踩）
 
 - **新建站点默认开着访问保护**，所有人打开都是 `401 Login Redirect`。要在 `Project configuration → Access control` 里关掉（API 上是 `sso_login: false`）。
-- **别用 Windows 自带的压缩去打包**。`Compress-Archive` 和 .NET 的 `ZipFile` 会把路径写成反斜杠，上传后首页正常、所有子页面 404。用仓库里的 `_tools/zip.mjs`。
+- **别用 Windows 自带的压缩去打包**。`Compress-Archive` 和 .NET 的 `ZipFile` 会把路径写成反斜杠，上传后首页正常、所有子页面 404。用仓库里的 `scripts/zip.mjs`。
 - 免费计划会强制带一个「Powered by Netlify」徽标，无法去掉（API 明确返回 `not available on this plan`）。要干净的无徽标方案，只有 GitHub Pages（需要 GitHub 账号）。
 
 ---
