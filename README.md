@@ -101,17 +101,34 @@ tags: [公告]
 
 ---
 
-## 四、上线（绑定自己的域名）
+## 四、上线
 
-完整步骤在 `docs/域名与部署指南.md`：选域名、在哪注册、要不要备案、Cloudflare Pages 怎么连仓库、DNS 填什么、出问题怎么查。
+站点已经上线：**https://dadaohuifu.netlify.app**（Netlify 免费计划）。
 
-最短路径三步：
+### 改了内容怎么发上去
 
-1. 买域名（Cloudflare Registrar / 阿里云 / 腾讯云都行）。
-2. Cloudflare Pages 新建项目，连这个仓库，构建命令填 `node build.mjs`，输出目录填 `dist`。
-3. Pages 项目 → Custom domains → 填你的域名，按提示加 DNS 记录。
+```
+node build.mjs
+NETLIFY_TOKEN=你的token node _tools/netlify-deploy.mjs dadaohuifu
+```
 
-上线后回到 `site.config.mjs` 把 `site.url` 改成正式域名，再构建部署一次（RSS 与 sitemap 里的绝对链接靠它）。
+脚本会自己建站（已存在就复用）、用零依赖打包器压缩 `dist`、上传、等到部署完成，然后打印地址。Token 在 Netlify 的 `User settings → Applications → Personal access tokens` 里生成。
+
+### 绑自己的域名
+
+完整步骤在 `docs/域名与部署指南.md`（Netlify 版）：选域名、在哪注册、要不要备案、DNS 记录填什么、出问题怎么查。最短路径：
+
+1. 买域名（阿里云 / 腾讯云 / Cloudflare Registrar 都行）。
+2. Netlify 项目 → `Domain management → Add a domain`，填你的域名。
+3. 按面板显示的值加 DNS 记录（根域名一条 A、www 一条 CNAME，值必须照抄面板）。
+
+换好域名后回到 `site.config.mjs` 把 `site.url` 改成 `https://你的域名`，重建并重新部署一次（RSS 与 sitemap 用的是绝对地址）。
+
+### 两个踩过的坑（别再踩）
+
+- **新建站点默认开着访问保护**，所有人打开都是 `401 Login Redirect`。要在 `Project configuration → Access control` 里关掉（API 上是 `sso_login: false`）。
+- **别用 Windows 自带的压缩去打包**。`Compress-Archive` 和 .NET 的 `ZipFile` 会把路径写成反斜杠，上传后首页正常、所有子页面 404。用仓库里的 `_tools/zip.mjs`。
+- 免费计划会强制带一个「Powered by Netlify」徽标，无法去掉（API 明确返回 `not available on this plan`）。要干净的无徽标方案，只有 GitHub Pages（需要 GitHub 账号）。
 
 ---
 
