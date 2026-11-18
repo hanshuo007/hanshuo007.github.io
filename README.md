@@ -107,6 +107,14 @@ tags: [公告]
 
 ### 改了内容怎么发上去
 
+**推荐：直接推送到 GitHub，什么都不用装。** 仓库连了 GitHub Actions（`.github/workflows/deploy.yml`）：
+
+1. 在 GitHub 网页上改，或者本地 `git push` 到 `main`；
+2. GitHub 自动跑 `node build.mjs` 构建 + 自检，再调用 Netlify API 上线；
+3. 一两分钟后刷新站点就是新版。构建日志在仓库的 Actions 页。
+
+**备选：在本地手动部署**（没有 GitHub 账号或有网络问题时）：
+
 ```
 node build.mjs
 NETLIFY_TOKEN=你的token node scripts/netlify-deploy.mjs dadaohuifu
