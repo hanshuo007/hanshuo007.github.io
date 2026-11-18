@@ -1,0 +1,14 @@
+node_modules/
+dist/
+
+# 开发期临时产物
+_shots/
+_chrome-cdp/
+_chrome-shot/
+_chrome-profile/
+_tools/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+Desktop.ini
