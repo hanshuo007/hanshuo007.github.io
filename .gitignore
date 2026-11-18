@@ -7,6 +7,8 @@ _chrome-cdp/
 _chrome-shot/
 _chrome-profile/
 _tools/
+_vercel_home/
+.vercel/
 
 # 系统文件
 .DS_Store
