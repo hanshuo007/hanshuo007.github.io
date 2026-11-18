@@ -1,7 +1,7 @@
-name: Deploy to Netlify
+name: Deploy
 
-# 推送到 main 就自动构建并上线。部署逻辑和本地 scripts/netlify-deploy.mjs 等价：
-# 跑 node build.mjs 生成 dist，再用 Netlify 官方 CLI 上传。
+# 推送 main：同时发布到 GitHub Pages（主站，无水印）和 Netlify（镜像）。
+# 构建是零依赖的 node build.mjs，产物 dist/。
 on:
   push:
     branches: [main]
@@ -15,8 +15,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  pages:
+    name: GitHub Pages
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,8 +35,30 @@ jobs:
       - name: 构建
         run: node build.mjs
 
-      - name: 自检（链接与 title/description）
+      - name: 自检
         run: node scripts/check-links.mjs
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  netlify:
+    name: Netlify 镜像
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 构建
+        run: node build.mjs
 
       - name: 部署到 Netlify
         env:

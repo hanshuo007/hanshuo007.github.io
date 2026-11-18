@@ -12,7 +12,7 @@ export const site = {
   description:
     '北京科技大学安徽分团阜阳队「打道回阜队」的小站：回答高中生关于北科大、专业选择与志愿填报的问题，并把招生资料整理好放在这里。',
   // 上线后用你的正式域名替换，结尾不要带斜杠。RSS / sitemap / 分享卡片都靠它。
-  url: 'https://dadaohuifu.netlify.app',
+  url: 'https://hanshuo007.github.io',
   lang: 'zh-CN',
   // 首页显示几条最新公告
   homeNewsCount: 3,
