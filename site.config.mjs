@@ -15,7 +15,7 @@ export const site = {
   url: 'https://hanshuo007.github.io',
   // 站点挂在域名下的哪一层路径。GitHub 用户站（仓库 <用户名>.github.io）填 ''；
   // 项目站（仓库 dadaohuifu）填 '/dadaohuifu'；将来绑自己的域名，改回 '' 重新构建即可。
-  basePath: '/dadaohuifu',
+  basePath: '',
   lang: 'zh-CN',
   // 首页显示几条最新公告
   homeNewsCount: 3,
