@@ -103,7 +103,9 @@ tags: [公告]
 
 ## 四、上线
 
-站点已经上线：**https://hanshuo007.github.io**（GitHub Pages，免费、无水印）。
+站点已经上线：**https://hanshuo007.github.io/dadaohuifu/**（GitHub Pages，免费、无水印）。
+
+> 地址里带 `/dadaohuifu/` 是因为仓库名是 `dadaohuifu`，属于 GitHub 的**项目站**。将来绑了自己的域名，把 `site.config.mjs` 里的 `basePath` 改成空字符串 `''` 再推一次，站点就会挂到域名根路径，链接自动全部改好。
 
 同一次 push 还会同步发布一份到 Netlify 作为镜像：<https://dadaohuifu.netlify.app>（那份带“Powered by Netlify”角标，是免费计划的强制项，删不掉，只当备用线路）。
 
