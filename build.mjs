@@ -19,6 +19,12 @@ import {
 } from './src/templates.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
+// 站内绝对路径的前缀（项目站需要，用户站/自定义域名为空）
+const BASE = (site.basePath || '').replace(/\/$/, '');
+const SITE_URL = site.url + BASE;
+// 把 href="/x" src="/x" action="/x" 统一改写成 href="<BASE>/x"
+const withBase = (html) =>
+  BASE ? html.replace(/(href|src|action)="\/(?!\/)/g, '$1="' + BASE + '/') : html;
 const DIST = path.join(ROOT, 'dist');
 const CONTENT = path.join(ROOT, 'content');
 
@@ -162,7 +168,7 @@ async function writePage(route, html) {
   const isFile = route.endsWith('.html');
   const target = isFile ? p(DIST, route) : p(DIST, route, 'index.html');
   await fs.mkdir(path.dirname(target), { recursive: true });
-  await fs.writeFile(target, html, 'utf8');
+  await fs.writeFile(target, withBase(html), 'utf8');
 }
 
 async function copyDir(from, to) {
@@ -197,7 +203,7 @@ function xmlEscape(text) {
 function rssFeed(posts, build) {
   const items = posts
     .map((post) => {
-      const url = site.url + '/news/' + post.slug + '/';
+      const url = SITE_URL + '/news/' + post.slug + '/';
       const pub = new Date(post.dateISO + 'T09:00:00Z').toUTCString();
       return (
         '    <item>\n' +
@@ -219,8 +225,8 @@ function rssFeed(posts, build) {
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n' +
     '  <channel>\n' +
     '    <title>' + xmlEscape(site.team + ' · 公告') + '</title>\n' +
-    '    <link>' + xmlEscape(site.url + '/news/') + '</link>\n' +
-    '    <atom:link href="' + xmlEscape(site.url + '/rss.xml') + '" rel="self" type="application/rss+xml"/>\n' +
+    '    <link>' + xmlEscape(SITE_URL + '/news/') + '</link>\n' +
+    '    <atom:link href="' + xmlEscape(SITE_URL + '/rss.xml') + '" rel="self" type="application/rss+xml"/>\n' +
     '    <description>' + xmlEscape(site.description) + '</description>\n' +
     '    <language>zh-cn</language>\n' +
     '    <lastBuildDate>' + build.date.toUTCString() + '</lastBuildDate>\n' +
@@ -238,7 +244,7 @@ function sitemap(routes, build) {
     routes
       .map(
         (route) =>
-          '  <url><loc>' + xmlEscape(site.url + route) + '</loc><lastmod>' + lastmod + '</lastmod></url>\n',
+          '  <url><loc>' + xmlEscape(SITE_URL + route) + '</loc><lastmod>' + lastmod + '</lastmod></url>\n',
       )
       .join('') +
     '</urlset>\n'
@@ -296,7 +302,7 @@ async function build() {
   if (await exists(contact.wechatQr)) contact.readyQrs.push(contact.wechatQr);
 
   const ctx = {
-    site,
+    site: { ...site, url: SITE_URL },
     contact,
     nav,
     build: buildInfo,
@@ -340,7 +346,7 @@ async function build() {
   await fs.writeFile(p(DIST, 'sitemap.xml'), sitemap(routes, buildInfo), 'utf8');
   await fs.writeFile(
     p(DIST, 'robots.txt'),
-    'User-agent: *\nAllow: /\nSitemap: ' + site.url + '/sitemap.xml\n',
+    'User-agent: *\nAllow: /\nSitemap: ' + SITE_URL + '/sitemap.xml\n',
     'utf8',
   );
 

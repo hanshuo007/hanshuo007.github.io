@@ -17,13 +17,17 @@ async function walk(dir, out) {
   return out;
 }
 
+const { site } = await import('../site.config.mjs');
+const BASE = (site.basePath || '').replace(/\/$/, '');
+
 const files = await walk(DIST, []);
 const htmlFiles = files.filter((f) => f.endsWith('.html'));
 const problems = [];
 
 const resolveTarget = (url) => {
-  const clean = url.split('#')[0].split('?')[0];
+  let clean = url.split('#')[0].split('?')[0];
   if (!clean.startsWith('/')) return null;
+  if (BASE && clean.startsWith(BASE)) clean = clean.slice(BASE.length) || '/';
   if (clean === '/') return path.join(DIST, 'index.html');
   if (clean.endsWith('/')) return path.join(DIST, clean, 'index.html');
   return path.join(DIST, clean);
