@@ -103,9 +103,13 @@ tags: [公告]
 
 ## 四、上线
 
-站点已经上线：**https://hanshuo007.github.io/dadaohuifu/**（GitHub Pages，免费、无水印）。
+站点已经上线：**https://hanshuo007.github.io/**（GitHub Pages，免费、无水印）。
 
-> 地址里带 `/dadaohuifu/` 是因为仓库名是 `dadaohuifu`，属于 GitHub 的**项目站**。将来绑了自己的域名，把 `site.config.mjs` 里的 `basePath` 改成空字符串 `''` 再推一次，站点就会挂到域名根路径，链接自动全部改好。
+> 仓库名是 `hanshuo007.github.io`，所以这是 GitHub 的**用户站**，站点直接挂在域名根路径。仓库名必须一字不差，改名就会掉到 `/仓库名/` 子路径、根地址直接 404 —— 这个坑我们已经踩过一次。
+
+> `site.config.mjs` 里的 `basePath` 目前是空字符串 `''`。如果哪天站点被迫挂在子路径（比如仓库改名成 `dadaohuifu`，变成项目站），把它改成 `'/dadaohuifu'` 再推一次，构建会自动给所有链接、RSS、sitemap 加上前缀。
+
+> 旧的 `/dadaohuifu/` 地址由一个单独的跳转仓库兜底（<https://hanshuo007.github.io/dadaohuifu/> → 自动跳回主站），所以之前发出去的链接不会失效。
 
 同一次 push 还会同步发布一份到 Netlify 作为镜像：<https://dadaohuifu.netlify.app>（那份带“Powered by Netlify”角标，是免费计划的强制项，删不掉，只当备用线路）。
 
@@ -128,14 +132,14 @@ NETLIFY_TOKEN=你的token node scripts/netlify-deploy.mjs dadaohuifu
 
 ### 绑自己的域名
 
-完整步骤在 `docs/域名与部署指南.md`（Netlify 版）：选域名、在哪注册、要不要备案、DNS 记录填什么、出问题怎么查。最短路径：
+完整步骤在 `docs/域名与部署指南.md`（GitHub Pages 版，Netlify 作附录）：选域名、在哪注册、要不要备案、DNS 记录填什么、出问题怎么查。最短路径：
 
 1. 买域名（阿里云 / 腾讯云 / Cloudflare Registrar 都行）。
 2. 仓库 **Settings → Pages → Custom domain** 填你的域名。
 3. 到域名注册商处按官方要求加 DNS 记录（根域名 A 记录、www 的 CNAME → `hanshuo007.github.io`），具体值以 GitHub 文档/设置页提示为准，别抄二手博客。
 4. 等证书签发后勾上 **Enforce HTTPS**。
 
-换好域名后回到 `site.config.mjs` 把 `site.url` 改成 `https://你的域名`，重建并重新部署一次（RSS 与 sitemap 用的是绝对地址）。
+换好域名后回到 `site.config.mjs` 把 `site.url` 改成 `https://你的域名`（`basePath` 保持 `''`），重建并重新部署一次（RSS 与 sitemap 用的是绝对地址）。
 
 ### 两个踩过的坑（别再踩）
 
