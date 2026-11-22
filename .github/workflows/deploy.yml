@@ -1,6 +1,6 @@
 name: Deploy
 
-# 推送 main：同时发布到 GitHub Pages（主站，无水印）和 Netlify（镜像）。
+# 推送 main：构建并发布到 GitHub Pages。
 # 构建是零依赖的 node build.mjs，产物 dist/。
 on:
   push:
@@ -46,22 +46,3 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v5
-
-  netlify:
-    name: Netlify 镜像
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: 构建
-        run: node build.mjs
-
-      - name: 部署到 Netlify
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        run: npx --yes netlify-cli@latest deploy --prod --dir=dist --site "$NETLIFY_SITE_ID"
