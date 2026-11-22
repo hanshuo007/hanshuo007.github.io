@@ -179,7 +179,12 @@ export function renderHome(ctx) {
     '    <div class="hero-copy">',
     '      <p class="eyebrow">USTB · 安徽分团 · 阜阳队</p>',
     '      <h1>' + esc(ctx.site.tagline) + '</h1>',
-    '      <p class="lede">我们是北京科技大学回阜阳做寒假招生宣传的学生小队。这个站点有两个用处：把你想问的问题答清楚，把你要用的资料整理好。</p>',
+    '      <p class="lede">我们是北京科技大学的阜阳学长学姐。想查北科大在安徽的录取信息、了解专业和校园生活，或看看我们什么时候回阜阳宣讲，从这里开始。</p>',
+    '      <ul class="quick-asks">',
+    '        <li><a href="/resources/">查北科大在安徽的录取信息 <span aria-hidden="true">→</span></a></li>',
+    '        <li><a href="/faq/#cat-2">了解专业和校园生活 <span aria-hidden="true">→</span></a></li>',
+    '        <li><a href="/news/">看阜阳宣讲安排 <span aria-hidden="true">→</span></a></li>',
+    '      </ul>',
     '      <div class="hero-actions">',
     '        <a class="btn btn-primary" href="/faq/">先看答疑</a>',
     '        <a class="btn btn-ghost" href="/resources/">去取资料</a>',
@@ -258,6 +263,7 @@ export function renderFaq(ctx) {
       '学生答疑',
       '整理了高中同学问得最多的问题。答案里出现具体数字的地方，我们都会标注来源或「待核实」，不猜。',
     ),
+    '<section class="section section-alt" style="padding:20px 0"><div class="wrap"><p class="faq-note">涉及分数线、招生计划、专业政策的内容，一律以<strong>北京科技大学本科招生网</strong>和<strong>安徽省教育招生考试院</strong>发布为准；标着【待队内核实】的条目正在核实中，核实后我们会更新。</p></div></section>',
     '<section class="section">',
     '  <div class="wrap faq-layout">',
     '    <aside class="faq-side">',
@@ -344,7 +350,7 @@ export function renderAsk(ctx) {
               ? '<div class="qr-slot' + (ch.qrReady ? ' is-ready' : '') + '">' +
                 (ch.qrReady
                   ? '<img src="' + esc(ch.qr) + '" alt="' + esc(ch.qrAlt) + '" width="168" height="168" loading="lazy">'
-                  : '<span class="qr-hint">二维码待上传</span>') +
+                  : '<span class="qr-hint">入口筹备中</span>') +
                 '</div>'
               : '') +
             '</article>',
