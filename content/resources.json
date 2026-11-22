@@ -7,25 +7,25 @@
         {
           "title": "北京科技大学本科招生网",
           "desc": "招生章程、专业目录、分省招生计划，都是官方原文，别信转述。",
-          "kind": "link",
+          "kind": "official",
           "href": "https://zhaosheng.ustb.edu.cn/"
         },
         {
           "title": "安徽省教育招生考试院",
           "desc": "一分一段表、批次控制线、投档与录取信息，填报志愿的唯一权威来源。",
-          "kind": "link",
+          "kind": "official",
           "href": "https://www.ahzsks.cn/"
         },
         {
           "title": "阳光高考（教育部）",
           "desc": "查专业库、招生章程、特殊类型招生政策，教育部的官方平台。",
-          "kind": "link",
+          "kind": "official",
           "href": "https://gaokao.chsi.com.cn/"
         },
         {
           "title": "北京科技大学官网",
           "desc": "学校概况、学院设置、校园新闻，想了解学校本身从这里进。",
-          "kind": "link",
+          "kind": "official",
           "href": "https://www.ustb.edu.cn/"
         }
       ]

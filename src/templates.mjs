@@ -121,7 +121,7 @@ function pageHero(eyebrow, title, lede) {
 export function renderHome(ctx) {
   const stats = [
     { value: ctx.stats.faqCount, label: '条答疑' },
-    { value: ctx.stats.resourceCount, label: '份资料' },
+    { value: ctx.resources.reduce((n, group) => n + group.items.filter(item => item.href).length, 0), label: '项可用资源' },
     { value: ctx.stats.newsCount, label: '篇公告' },
   ]
     .map((s) => '<li><strong>' + s.value + '</strong><span>' + s.label + '</span></li>')
@@ -140,7 +140,7 @@ export function renderHome(ctx) {
       title: '资料',
       href: '/resources/',
       desc: '招生简章、专业介绍、往年分数与复习资料，能直接下载的就直接下，大合集走网盘。',
-      action: '去取资料',
+      action: '查看资料',
     },
     {
       no: '03',
@@ -187,7 +187,7 @@ export function renderHome(ctx) {
     '      </ul>',
     '      <div class="hero-actions">',
     '        <a class="btn btn-primary" href="/faq/">先看答疑</a>',
-    '        <a class="btn btn-ghost" href="/resources/">去取资料</a>',
+    '        <a class="btn btn-ghost" href="/resources/">查看资料</a>',
     '      </div>',
     '      <ul class="hero-stats">' + stats + '</ul>',
     '    </div>',
@@ -221,10 +221,10 @@ export function renderHome(ctx) {
     '<section class="section cta">',
     '  <div class="wrap cta-inner">',
     '    <div>',
-    '      <h2>有想问题，别憋着</h2>',
+    '      <h2>想问问阜阳的学长学姐？</h2>',
     '      <p>关于学校、专业、志愿、复习节奏，都可以问。我们不一定知道全部答案，但会尽量说真话。</p>',
     '    </div>',
-    '    <a class="btn btn-primary btn-lg" href="/ask/">去提问</a>',
+    '    <a class="btn btn-primary btn-lg" href="/ask/">查看答疑渠道</a>',
     '  </div>',
     '</section>',
   ].join('\n');
@@ -271,7 +271,7 @@ export function renderFaq(ctx) {
     ctx.faq
       .map((g) => '<a href="#' + esc(g.slug) + '">' + esc(g.category) + '</a>')
       .join('') || '<span class="muted">暂无</span>',
-    '      <a class="side-cta" href="/ask/">没找到答案？去提问</a>',
+    '      <a class="side-cta" href="/ask/">查看答疑渠道</a>',
     '    </aside>',
     '    <div class="faq-main">',
     ctx.faq.length ? groups : empty,
@@ -299,7 +299,7 @@ export function renderAsk(ctx) {
       desc: '填完直接进我们的表格，谁值班谁看。想匿名也可以。',
       href: c.formUrl,
       action: '打开提问表',
-      qr: c.formQr,
+      qr: c.readyQrs.includes(c.formQr) ? c.formQr : null,
       qrAlt: '提问表二维码',
     });
   }
@@ -312,7 +312,7 @@ export function renderAsk(ctx) {
       action: '加群',
     });
   }
-  if (c.wechatQr) {
+  if (c.readyQrs.includes(c.wechatQr)) {
     channels.push({
       badge: '微信群',
       title: '微信群',
@@ -331,10 +331,6 @@ export function renderAsk(ctx) {
     });
   }
 
-  channels.forEach((ch) => {
-    if (ch.qr) ch.qrReady = (c.readyQrs || []).indexOf(ch.qr) !== -1;
-  });
-
   const cards = channels.length
     ? channels
         .map(
@@ -347,17 +343,14 @@ export function renderAsk(ctx) {
               ? '<a class="btn btn-primary" href="' + esc(ch.href) + '" rel="noopener">' + esc(ch.action) + '</a>'
               : '') +
             (ch.qr
-              ? '<div class="qr-slot' + (ch.qrReady ? ' is-ready' : '') + '">' +
-                (ch.qrReady
-                  ? '<img src="' + esc(ch.qr) + '" alt="' + esc(ch.qrAlt) + '" width="168" height="168" loading="lazy">'
-                  : '<span class="qr-hint">入口筹备中</span>') +
+              ? '<div class="qr-slot is-ready"><img src="' + esc(ch.qr) + '" alt="' + esc(ch.qrAlt) + '" width="168" height="168" loading="lazy">' +
                 '</div>'
               : '') +
             '</article>',
         )
         .join('')
-    : '<div class="empty-state"><p>提问入口正在配置（表单链接与群二维码还没填）。</p>' +
-      '<p>上线前改 <code>site.config.mjs</code> 里的 <code>contact</code> 即可。</p></div>';
+    : '<div class="empty-state"><p>小队的线上答疑渠道正在筹备。</p>' +
+      '<p>你可以先<a href="/faq/">查看学生答疑</a>，或<a href="/news/">查看小队公告</a>。</p></div>';
 
   const popular = ctx.faq.slice(0, 3).flatMap((group) =>
     group.items.slice(0, 2).map((item, index) => ({
@@ -434,20 +427,22 @@ export function renderResources(ctx) {
       .join('');
 
   const card = (item, groupSlug) => {
-    const isLink = item.kind === 'link';
+    const isOfficial = item.kind === 'official';
+    const isLink = item.kind === 'link' || isOfficial;
     const meta = [];
     if (item.size) meta.push(item.size);
-    if (isLink) meta.push('网盘');
+    const kindLabel = isOfficial ? '官方入口' : isLink ? '网盘链接' : '站内下载';
+    const actionLabel = isOfficial ? '访问官网' : isLink ? '去网盘' : '下载';
 
     const inner =
       '<span class="res-top">' +
-      '<span class="res-kind ' + (isLink ? 'is-link' : 'is-file') + '">' + (isLink ? '网盘链接' : '站内下载') + '</span>' +
+      '<span class="res-kind ' + (isLink ? 'is-link' : 'is-file') + '">' + kindLabel + '</span>' +
       (meta.length ? '<span class="res-meta">' + meta.map(esc).join(' · ') + '</span>' : '') +
       '</span>' +
       '<span class="res-title">' + esc(item.title) + '</span>' +
       (item.desc ? '<span class="res-desc">' + esc(item.desc) + '</span>' : '') +
       (item.href
-        ? '<span class="res-action">' + (isLink ? '去网盘' : '下载') + ' <span aria-hidden="true">↓</span></span>'
+        ? '<span class="res-action">' + actionLabel + ' <span aria-hidden="true">' + (isLink ? '↗' : '↓') + '</span></span>'
         : '');
 
     if (!item.href) {
@@ -471,7 +466,7 @@ export function renderResources(ctx) {
     .join('');
 
   const body = [
-    pageHero('FILES', '资料分享', '能直接下载的放站内，文件太大的走网盘。资料会随宣讲进度更新，回来这里刷新即可。'),
+    pageHero('FILES', '资料分享', '查安徽投档信息、北科大招生计划和专业目录，可以直接打开下方的官方入口。小队资料上传后会在这里提供下载。'),
     '<section class="section">',
     '  <div class="wrap">',
     '    <div class="res-toolbar">',
@@ -480,7 +475,7 @@ export function renderResources(ctx) {
     '    </div>',
     '    <div class="res-list"' + (groups.length ? '' : ' hidden') + '>' + sections + '</div>',
     groups.length
-      ? ''
+      ? '<p class="empty-state" data-empty hidden>没有找到匹配的资料。可以更换关键词或选择其他分类。</p>'
       : '<div class="empty-state"><p>资料还在整理，第一批会在宣讲开始前放上来。</p></div>',
     '    <p class="res-note">说明：所有资料仅用于个人了解与学习，请勿商用；涉及学校官方发布的文件，以学校官网原版为准。</p>',
     '  </div>',

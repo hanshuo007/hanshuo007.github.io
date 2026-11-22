@@ -1592,3 +1592,7 @@ h3 {
     background: #fff;
   }
 }
+
+.res-card[hidden], .res-group[hidden], [data-empty][hidden] {
+  display: none;
+}
