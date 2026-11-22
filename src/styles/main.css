@@ -391,6 +391,45 @@ h3 {
   margin-top: 28px;
 }
 
+.quick-asks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quick-asks a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.9rem;
+  color: var(--fg-soft);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.quick-asks a:hover {
+  color: var(--accent);
+  border-color: var(--border-strong);
+  text-decoration: none;
+}
+
+.faq-note {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--fg-muted);
+}
+
+.faq-note strong {
+  color: var(--fg);
+}
+
 .hero-stats {
   display: flex;
   gap: 28px;
