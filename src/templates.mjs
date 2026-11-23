@@ -79,6 +79,7 @@ function head(ctx, page) {
     '<meta property="og:image" content="' + esc(ctx.site.url + '/images/autumn-ding.webp') + '">',
     '<meta name="twitter:card" content="summary_large_image">',
     '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
+    '<link rel="preload" as="image" href="/images/autumn-ding.webp" fetchpriority="high">',
     '<link rel="stylesheet" href="/assets/styles.css">',
     '<script>' + THEME_SCRIPT + '(' + installPageMotion.toString() + ')();</script>',
   ].join('\n    ');
@@ -227,12 +228,12 @@ export function renderHome(ctx) {
   const body = `
     <section class="journey" aria-labelledby="home-title" data-journey>
       <div class="journey-screen">
-        <img class="journey-photo" src="/images/autumn-ding.webp" width="1099" height="1470" alt="银杏黄叶映衬下的校园方鼎" fetchpriority="high">
+        <img class="journey-photo" src="/images/autumn-ding.webp" width="760" height="1017" alt="银杏黄叶映衬下的校园方鼎" fetchpriority="high">
         <div class="journey-shade"></div>
         <figure class="team-portraits">
           <div class="portrait-pair">
-            <img src="/images/team-noodles.webp" width="600" height="600" alt="打道回阜队吉祥物阜小穗：戴麦穗发饰、手捧两碗面">
-            <img src="/images/team-peony.webp" width="600" height="600" alt="打道回阜队吉祥物皖小丹：戴塔纹头带、手持牡丹">
+            <img src="/images/team-noodles.webp" width="520" height="520" alt="打道回阜队吉祥物阜小穗：戴麦穗发饰、手捧两碗面">
+            <img src="/images/team-peony.webp" width="520" height="520" alt="打道回阜队吉祥物皖小丹：戴塔纹头带、手持牡丹">
           </div>
           <figcaption>
             <span class="portrait-caption" aria-live="polite">阜小穗 · 穗穗</span>
@@ -290,9 +291,9 @@ export function renderHome(ctx) {
           <a href="https://news.ustb.edu.cn/stkj/tsbk/jcxy.htm">去看近期校园照片 ↗</a>
         </div>
         <div class="autumn-strip" tabindex="0" role="region" aria-label="北科大秋景相册，可横向浏览">
-          <figure><img src="/images/autumn-ding.webp" width="1099" height="1470" alt="方鼎背后是满树金黄的银杏" loading="lazy"><figcaption>银杏树下的方鼎</figcaption></figure>
-          <figure><img src="/images/autumn-balloon.webp" width="1100" height="1377" alt="红色 USTB 爱心气球与手中的校园明信片" loading="lazy"><figcaption>把秋天装进明信片</figcaption></figure>
-          <figure><img src="/images/autumn-canopy.webp" width="1023" height="1470" alt="沿树干仰望层层叠叠的金黄银杏叶" loading="lazy"><figcaption>抬头，满树金黄</figcaption></figure>
+          <figure><img src="/images/autumn-ding.webp" width="760" height="1017" alt="方鼎背后是满树金黄的银杏" loading="lazy"><figcaption>银杏树下的方鼎</figcaption></figure>
+          <figure><img src="/images/autumn-balloon.webp" width="700" height="876" alt="红色 USTB 爱心气球与手中的校园明信片" loading="lazy"><figcaption>把秋天装进明信片</figcaption></figure>
+          <figure><img src="/images/autumn-canopy.webp" width="700" height="1006" alt="沿树干仰望层层叠叠的金黄银杏叶" loading="lazy"><figcaption>抬头，满树金黄</figcaption></figure>
         </div>
       </div>
     </section>
