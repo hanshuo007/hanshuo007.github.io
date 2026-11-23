@@ -11,6 +11,24 @@
           "href": "https://zhaosheng.ustb.edu.cn/"
         },
         {
+          "title": "北科大历年录取分数",
+          "desc": "从学校官方系统选择年份和省份，查看往年录取数据。",
+          "kind": "official",
+          "href": "https://zhaoshengyunzhi.ustb.edu.cn/zsw/lnfs.html"
+        },
+        {
+          "title": "北科大分省招生计划",
+          "desc": "查看学校公布的分省招生专业和计划，填报时核对当年信息。",
+          "kind": "official",
+          "href": "https://zhaoshengyunzhi.ustb.edu.cn/zsw/zsjh.html"
+        },
+        {
+          "title": "北科大本科专业介绍",
+          "desc": "按专业阅读学校本科招生网提供的介绍。",
+          "kind": "official",
+          "href": "https://zhaosheng.ustb.edu.cn/xkzy/zyjs/index.htm"
+        },
+        {
           "title": "安徽省教育招生考试院",
           "desc": "一分一段表、批次控制线、投档与录取信息，填报志愿的唯一权威来源。",
           "kind": "official",
