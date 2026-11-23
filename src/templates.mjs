@@ -6,13 +6,24 @@ const THEME_SCRIPT =
   "(function(){try{var s=localStorage.getItem('theme');" +
   "if(s==='light'||s==='dark'){document.documentElement.setAttribute('data-theme',s);}}catch(e){}})();";
 
-function navItems(ctx, active) {
+const dockIcons = {
+  '/': 'M3 10.5 12 3l9 7.5M5.5 9v11h5v-6h3v6h5V9',
+  '/faq/': 'M4 4.5h16v12H11l-5.5 4v-4H4z M8 9h8M8 12h5',
+  '/resources/': 'M3 7h7l2 2h9v10H3z M4 7V4h6l2 2h7v3',
+  '/news/': 'M4 10h4l10-5v14l-10-5H4z M7 14l2 6h3l-2-5',
+  '/about/': 'M3 20c0-4 2.5-6 6-6s6 2 6 6 M12 8a3 3 0 1 1-6 0 3 3 0 1 1 6 0 M16 5a3 3 0 0 1 0 6 M17 14c3 0 4 2 4 5',
+};
+
+function navItems(ctx, active, dock = false) {
   return ctx.nav
     .map((item) => {
       const isActive = item.href === active;
+      const icon = dock && dockIcons[item.href]
+        ? '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="' + dockIcons[item.href] + '"/></svg>'
+        : '';
       return (
         '<a class="nav-link' + (isActive ? ' is-active' : '') + '" href="' + item.href + '"' +
-        (isActive ? ' aria-current="page"' : '') + '>' + esc(item.label) +
+        (isActive ? ' aria-current="page"' : '') + '>' + icon + esc(item.label) +
         (isActive ? '<span class="nav-station" aria-hidden="true"></span>' : '') + '</a>'
       );
     })
@@ -55,7 +66,7 @@ function head(ctx, page) {
   const canonical = ctx.site.url + page.path;
   return [
     '<meta charset="utf-8">',
-    '<meta name="viewport" content="width=device-width, initial-scale=1">',
+    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
     '<title>' + esc(title) + '</title>',
     '<meta name="description" content="' + esc(description) + '">',
     '<link rel="canonical" href="' + esc(canonical) + '">',
@@ -126,6 +137,7 @@ export function layout(ctx, page, mainHtml) {
     '</head>',
     '<body class="' + (page.bodyClass || '') + '">',
     header(ctx, page.active),
+    '<nav class="mobile-dock" aria-label="底部主导航">' + navItems(ctx, page.active, true) + '</nav>',
     '<main id="main" class="site-main">',
     mainHtml,
     '</main>',
@@ -217,6 +229,12 @@ export function renderHome(ctx) {
       <div class="journey-screen">
         <img class="journey-photo" src="/images/ustb-west-gate.webp" alt="从北京科技大学西门望向校园" width="1400" height="1050" fetchpriority="high">
         <div class="journey-shade"></div>
+        <div class="mobile-ticket" aria-label="寒招回程票，从北京学院路到安徽阜阳">
+          <div class="ticket-paper"><div class="ticket-label">寒招回程票 <span lang="en">BOARDING PASS</span></div>
+            <div class="ticket-route"><span>北京<small>学院路</small></span><i aria-hidden="true">→</i><span>阜阳<small>安徽</small></span></div>
+            <div class="ticket-stub"><span>打道回阜队</span><i aria-hidden="true"></i></div>
+          </div>
+        </div>
         <canvas class="journey-map" aria-hidden="true"></canvas>
         <div class="journey-inner">
           <div class="journey-kicker"><span aria-hidden="true">↘</span> 北京科技大学 · 阜阳寒招</div>
@@ -230,7 +248,7 @@ export function renderHome(ctx) {
               <p>关于录取、专业和大学生活，<br>来听听阜阳学长学姐的回答。</p>
             </div>
           </div>
-          <div class="journey-actions"><a class="journey-skip" href="#route">查看寒招路线 <span aria-hidden="true">↘</span></a><a class="journey-album-link" href="#album">逛逛校园相册</a></div>
+          <div class="journey-actions"><a class="journey-skip" href="#route">查看寒招路线 <span aria-hidden="true">↘</span></a><a class="journey-album-link" href="#handbook">翻开报考手册</a></div>
           <div class="journey-bottom">
             <div class="journey-timeline" aria-label="从北京到阜阳">
               <span>北京 <small lang="en">BEIJING</small></span>
@@ -252,13 +270,22 @@ export function renderHome(ctx) {
         <div class="route-details">${stopDetails}</div>
       </div>
     </section>
+    <section class="wrap guide-shelf" id="handbook" aria-labelledby="handbook-title">
+      <div class="editorial-heading">
+        <div><h2 id="handbook-title">阜阳同学的<em>报考手册</em></h2>
+        <p>听宣讲前挑一篇读，带着自己的问题来。</p></div>
+        <a href="/resources/">资料下载 ↗</a>
+      </div>
+      <div class="guide-covers">${ctx.guides.map(guideCover).join('')}</div>
+    </section>
     <section class="album-section" id="album" aria-labelledby="album-title">
       <div class="wrap">
         <div class="editorial-heading">
-          <div><h2 id="album-title">北科大，<em>镜头里的日常</em></h2>
-          <p>从银杏树下走到阅览室，再去球场边站一会儿。</p></div>
-          <a href="/about/#image-credit">照片出处 ↗</a>
+          <div><h2 id="album-title">看看最近的<em>北科大</em></h2>
+          <p>北科大新闻网的「菁彩校园」持续收录校园摄影。</p></div>
+          <a href="https://news.ustb.edu.cn/stkj/tsbk/jcxy.htm">去看近期校园照片 ↗</a>
         </div>
+        <details class="photo-archive"><summary>翻阅校园旧照 · 2010 至 2017</summary>
         <div class="campus-prints">
           <figure class="campus-print print-lead">
             <img src="/images/campus-ginkgo.webp" width="960" height="640" loading="lazy" alt="金黄色的银杏树冠下，同学们穿过校园小路">
@@ -273,15 +300,8 @@ export function renderHome(ctx) {
             <figcaption><time datetime="2017-10">2017.10</time><h3>从角旗看球场</h3></figcaption>
           </figure>
         </div>
+        <a class="archive-credit" href="/about/#image-credit">旧照出处 ↗</a></details>
       </div>
-    </section>
-    <section class="wrap guide-shelf" id="handbook" aria-labelledby="handbook-title">
-      <div class="editorial-heading">
-        <div><h2 id="handbook-title">阜阳同学的<em>报考手册</em></h2>
-        <p>听宣讲前挑一篇读，带着自己的问题来。</p></div>
-        <a href="/resources/">资料下载 ↗</a>
-      </div>
-      <div class="guide-covers">${ctx.guides.map(guideCover).join('')}</div>
     </section>
     <section class="home-section home-updates wrap" aria-label="小队近况">
       <div class="home-news">
