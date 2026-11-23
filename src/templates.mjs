@@ -294,22 +294,6 @@ export function renderHome(ctx) {
           <figure><img src="/images/autumn-balloon.webp" width="1100" height="1377" alt="红色 USTB 爱心气球与手中的校园明信片" loading="lazy"><figcaption>把秋天装进明信片</figcaption></figure>
           <figure><img src="/images/autumn-canopy.webp" width="1023" height="1470" alt="沿树干仰望层层叠叠的金黄银杏叶" loading="lazy"><figcaption>抬头，满树金黄</figcaption></figure>
         </div>
-        <details class="photo-archive"><summary>翻阅校园旧照 · 2010 至 2017</summary>
-        <div class="campus-prints">
-          <figure class="campus-print print-lead">
-            <img src="/images/campus-ginkgo.webp" width="960" height="640" loading="lazy" alt="金黄色的银杏树冠下，同学们穿过校园小路">
-            <figcaption><time datetime="2017-10">2017.10</time><h3>银杏黄了</h3><p>十月的树荫，把路过的同学也收进了风景。</p></figcaption>
-          </figure>
-          <figure class="campus-print print-library">
-            <img src="/images/campus-library.webp" width="560" height="320" loading="lazy" alt="窗边一排排长桌前，学生正在阅读和自习">
-            <figcaption><time datetime="2010-05">2010.05</time><h3>靠窗的自习位</h3></figcaption>
-          </figure>
-          <figure class="campus-print print-field">
-            <img src="/images/campus-football.webp" width="560" height="320" loading="lazy" alt="从角旗旁望向正在比赛的北科大足球场">
-            <figcaption><time datetime="2017-10">2017.10</time><h3>从角旗看球场</h3></figcaption>
-          </figure>
-        </div>
-        <a class="archive-credit" href="/about/#image-credit">旧照出处 ↗</a></details>
       </div>
     </section>
     <section class="home-section home-updates wrap" aria-label="小队近况">
