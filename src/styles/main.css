@@ -2034,9 +2034,16 @@ h3 {
   .team-portraits[data-front] img { transition: transform .28s cubic-bezier(.21,.74,.29,1), opacity .2s; }
 }
 
-/* 首屏校门照：picture 不占布局，横竖两版按视口切换 */
-.journey-photo-wrap { display: contents; }
-.journey-photo--gate { object-position: 50% 42%; filter: saturate(.92); }
-@media (max-width: 760px) {
-  .journey-photo--gate { object-position: 50% center; }
-}
+/* 形象与物料页 */
+.brand-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; margin: 6px 0 38px; align-items: start; }
+.brand-card { margin: 0; background: var(--paper); border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
+.brand-card img { display: block; width: 100%; height: auto; background: #fff; }
+.brand-card figcaption { padding: 18px 20px 22px; }
+.brand-card figcaption h2, .brand-card figcaption h3 { margin: 0 0 8px; font-size: 1.12rem; }
+.brand-card figcaption p { margin: 0 0 14px; color: var(--fg-muted); line-height: 1.75; font-size: .94rem; }
+.brand-sub { margin: 30px 0 4px; font-size: 1.3rem; }
+.brand-card--emblem { max-width: 460px; }
+.brand-note { border-top: 1px solid var(--border); padding-top: 22px; margin-top: 10px; }
+.brand-note h2 { margin: 0 0 10px; font-size: 1.15rem; }
+.brand-note p { margin: 0 0 8px; color: var(--fg-muted); line-height: 1.85; }
+@media (max-width: 700px) { .brand-grid { gap: 16px; grid-template-columns: 1fr; } }
