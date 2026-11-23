@@ -15,6 +15,7 @@ import {
   renderResources,
   renderNewsList,
   renderNewsPost,
+  renderBrand,
   renderAbout,
   renderNotFound,
 } from './src/templates.mjs';
