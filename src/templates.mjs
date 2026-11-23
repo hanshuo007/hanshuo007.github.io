@@ -91,7 +91,7 @@ function header(ctx, active) {
     '<header class="site-header">',
     '  <div class="wrap header-inner">',
     '    <a class="brand" href="/" aria-label="' + esc(ctx.site.team) + ' 首页">',
-    '      <span class="brand-mark">' + logoMark(40) + '</span>',
+    '      <span class="brand-mark"><img class="brand-mark-img" src="/images/emblem-mark.webp" width="40" height="40" alt="" decoding="async"></span>',
     '      <span class="brand-text">',
     '        <span class="brand-name">' + esc(ctx.site.team) + '</span>',
     '        <span class="brand-org">' + esc(ctx.site.org) + '</span>',
@@ -647,22 +647,10 @@ export function renderNewsPost(ctx, post) {
 export function renderAbout(ctx, html) {
   const body = [
     pageHero('ABOUT', '关于我们', ctx.site.org),
-    '<p><a class="btn btn-primary" href="/brand/">看队徽与海报</a></p>',
     '<section class="section"><div class="wrap article-wrap"><div class="prose">' + html,
-    '<h3 id="image-credit">图片来源</h3>',
-    '<p>首页方鼎与银杏、USTB 爱心气球和银杏树冠三张照片由打道回阜队提供。</p>',
-    '<p>「银杏黄了」与「从角旗看球场」摄影为纳瓦拉的亨利，授权为 <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>。两图均缩放、转为 WebP 并在页面裁切，沿用原许可。原作见 <a href="https://commons.wikimedia.org/wiki/File:Ginkgo_trees_of_University_of_Science_and_Technology_Beijing_2017_01.jpg">银杏</a>、<a href="https://commons.wikimedia.org/wiki/File:Football_match_University_of_Science_and_Technology_Beijing_2017_-_01.jpg">足球比赛</a>。</p>',
-    '<p>「靠窗的自习位」摄影为 Ccyber5，作者将作品释入公有领域。<a href="https://commons.wikimedia.org/wiki/File:Reading_Room_For_SS_USTB_Library.jpg">阅览室原图</a></p>',
     '</div></div></section>',
-  ].join('\n');
-  return layout(ctx, { path: '/about/', title: '关于', active: '/about/', description: ctx.site.description }, body);
-}
-
-
-export function renderBrand(ctx) {
-  const body = [
-    pageHero('BRAND', '形象与物料', '队徽、宣传海报与「阜见北科」双城纪念'),
     '<section class="section"><div class="wrap">',
+    '<h2 class="brand-sub">队徽与宣传海报</h2>',
     '<div class="brand-grid">',
     '<figure class="brand-card brand-card--emblem">',
     '  <img src="/images/emblem.webp" width="900" height="901" loading="lazy" alt="打道回阜队队徽：红蓝飘带环绕，文峰塔与亭台立于水岸，外圈书「打道回阜」与 USTB">',
@@ -692,9 +680,16 @@ export function renderBrand(ctx) {
     '<p>需要矢量源文件（AI / PSD）或改年份版本，与管理组联系。</p>',
     '</div>',
     '</div></section>',
+    '<section class="section"><div class="wrap article-wrap"><div class="prose">',
+    '<h3 id="image-credit">图片来源</h3>',
+    '<p>首页方鼎与银杏、USTB 爱心气球和银杏树冠三张照片由打道回阜队提供。</p>',
+    '<p>「银杏黄了」与「从角旗看球场」摄影为纳瓦拉的亨利，授权为 <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>。两图均缩放、转为 WebP 并在页面裁切，沿用原许可。原作见 <a href="https://commons.wikimedia.org/wiki/File:Ginkgo_trees_of_University_of_Science_and_Technology_Beijing_2017_01.jpg">银杏</a>、<a href="https://commons.wikimedia.org/wiki/File:Football_match_University_of_Science_and_Technology_Beijing_2017_-_01.jpg">足球比赛</a>。</p>',
+    '<p>「靠窗的自习位」摄影为 Ccyber5，作者将作品释入公有领域。<a href="https://commons.wikimedia.org/wiki/File:Reading_Room_For_SS_USTB_Library.jpg">阅览室原图</a></p>',
+    '</div></div></section>',
   ].join('\n');
-  return layout(ctx, { path: '/brand/', title: '形象与物料', active: '/brand/', description: '打道回阜队队徽、宣传海报与双城纪念物料' }, body);
+  return layout(ctx, { path: '/about/', title: '关于', active: '/about/', description: ctx.site.description }, body);
 }
+
 
 export function renderNotFound(ctx) {
   const body = [
