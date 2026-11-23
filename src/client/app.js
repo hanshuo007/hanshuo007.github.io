@@ -19,6 +19,54 @@
     });
   }
 
+  var faqSearch = document.querySelector('[data-faq-search]');
+  if (faqSearch) {
+    var faqInput = faqSearch.querySelector('input');
+    var faqStatus = faqSearch.querySelector('[role="status"]');
+    var faqGroups = Array.from(document.querySelectorAll('.faq-group'), function (group) {
+      return {
+        element: group,
+        items: Array.from(group.querySelectorAll('.faq-item'), function (item) {
+          return { element: item, text: item.textContent.toLowerCase() };
+        }),
+      };
+    });
+
+    function filterFaq() {
+      var term = faqInput.value.trim().toLowerCase();
+      var matches = 0;
+      faqGroups.forEach(function (group) {
+        var visible = 0;
+        group.items.forEach(function (item) {
+          item.element.hidden = !item.text.includes(term);
+          if (!item.element.hidden) visible += 1;
+        });
+        group.element.hidden = visible === 0;
+        var category = document.querySelector('.faq-side a[href="#' + group.element.id + '"]');
+        if (category) category.hidden = group.element.hidden;
+        matches += visible;
+      });
+      faqStatus.textContent = term ? (matches ? '找到 ' + matches + ' 条答疑' : '暂无匹配答疑，试试其他关键词。') : '';
+    }
+
+    function openLinkedQuestion() {
+      var fragment = window.location.hash.slice(1);
+      var question = document.getElementById(fragment);
+      if (!question || !question.matches('.faq-item')) return;
+      if (question.hidden) {
+        faqInput.value = '';
+        filterFaq();
+      }
+      question.open = true;
+      question.scrollIntoView({ block: 'start' });
+    }
+
+    faqSearch.hidden = false;
+    faqInput.addEventListener('input', filterFaq);
+    window.addEventListener('hashchange', openLinkedQuestion);
+    openLinkedQuestion();
+  }
+
   var cards = Array.prototype.slice.call(document.querySelectorAll('.res-card'));
   if (!cards.length) return;
 

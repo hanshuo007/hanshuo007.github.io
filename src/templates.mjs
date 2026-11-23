@@ -1,6 +1,6 @@
 // 页面模板：纯字符串拼接，没有模板引擎，也就没有依赖。
 import { escapeHtml as esc } from './markdown.mjs';
-import { logoMark, orbitRings } from './brand.mjs';
+import { logoMark } from './brand.mjs';
 
 const THEME_SCRIPT =
   "(function(){try{var s=localStorage.getItem('theme');" +
@@ -28,12 +28,13 @@ function head(ctx, page) {
     '<title>' + esc(title) + '</title>',
     '<meta name="description" content="' + esc(description) + '">',
     '<link rel="canonical" href="' + esc(canonical) + '">',
-    '<meta name="theme-color" content="#0e2340">',
+    '<meta name="theme-color" content="#551a2c">',
     '<meta property="og:type" content="' + (page.ogType || 'website') + '">',
     '<meta property="og:site_name" content="' + esc(ctx.site.team) + '">',
     '<meta property="og:title" content="' + esc(title) + '">',
     '<meta property="og:description" content="' + esc(description) + '">',
     '<meta property="og:url" content="' + esc(canonical) + '">',
+    '<meta property="og:image" content="' + esc(ctx.site.url + '/images/ustb-west-gate.webp') + '">',
     '<meta name="twitter:card" content="summary_large_image">',
     '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
     '<link rel="stylesheet" href="/assets/styles.css">',
@@ -119,117 +120,78 @@ function pageHero(eyebrow, title, lede) {
 
 // ---------- 首页 ----------
 export function renderHome(ctx) {
-  const stats = [
-    { value: ctx.stats.faqCount, label: '条答疑' },
-    { value: ctx.resources.reduce((n, group) => n + group.items.filter(item => item.href).length, 0), label: '项可用资源' },
-    { value: ctx.stats.newsCount, label: '篇公告' },
-  ]
-    .map((s) => '<li><strong>' + s.value + '</strong><span>' + s.label + '</span></li>')
-    .join('');
-
-  const entries = [
+  const tasks = [
     {
-      no: '01',
-      title: '答疑',
-      href: '/faq/',
-      desc: '把高中生最常问的问题整理成一份能查的答案：北科大怎么样、专业怎么选、志愿怎么填。',
-      action: '去看答疑',
+      title: '查安徽录取信息',
+      description: '从历年分数、当年招生计划和安徽省的投档信息入手。',
+      href: '/resources/#res-1',
     },
     {
-      no: '02',
-      title: '资料',
-      href: '/resources/',
-      desc: '招生简章、专业介绍、往年分数与复习资料，能直接下载的就直接下，大合集走网盘。',
-      action: '查看资料',
+      title: '了解专业与校园',
+      description: '专业怎么选、大类怎么分流，宿舍和食堂是什么样。',
+      href: '/faq/#cat-2',
     },
     {
-      no: '03',
-      title: '公告',
+      title: '看阜阳宣讲安排',
+      description: '进校时间、地点以及小队的最新动态都在这里。',
       href: '/news/',
-      desc: '小队的宣讲安排、进校时间、资料更新与站点变化，都写在这里，不做朋友圈式的碎片更新。',
-      action: '看最新公告',
     },
-  ]
-    .map(
-      (e) =>
-        '<a class="entry-card" href="' + e.href + '">' +
-        '<span class="entry-no">' + e.no + '</span>' +
-        '<h3>' + esc(e.title) + '</h3>' +
-        '<p>' + esc(e.desc) + '</p>' +
-        '<span class="entry-action">' + esc(e.action) + ' <span aria-hidden="true">→</span></span>' +
-        '</a>',
-    )
-    .join('\n      ');
+  ];
+  const cards = tasks.map((task) => `
+    <a class="home-task" href="${task.href}">
+      <span class="task-icon" aria-hidden="true"><span></span></span>
+      <span class="task-arrow" aria-hidden="true">↗</span>
+      <h3>${esc(task.title)}</h3>
+      <p>${esc(task.description)}</p>
+    </a>
+  `).join('');
+  const news = ctx.news.slice(0, ctx.site.homeNewsCount).map((post) => `
+    <a class="home-news-row" href="/news/${esc(post.slug)}/">
+      <time datetime="${esc(post.dateISO)}">${esc(post.dateShort)}</time>
+      <span>${esc(post.title)}</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+  `).join('');
 
-  const news = ctx.news
-    .slice(0, ctx.site.homeNewsCount)
-    .map(
-      (post) =>
-        '<a class="news-row" href="/news/' + post.slug + '/">' +
-        '<time datetime="' + post.dateISO + '">' + esc(post.dateShort) + '</time>' +
-        '<span class="news-title">' + esc(post.title) + '</span>' +
-        '<span class="news-more" aria-hidden="true">→</span>' +
-        '</a>',
-    )
-    .join('\n      ');
-
-  const body = [
-    '<section class="hero">',
-    '  <div class="wrap hero-inner">',
-    '    <div class="hero-copy">',
-    '      <p class="eyebrow">USTB · 安徽分团 · 阜阳队</p>',
-    '      <h1>' + esc(ctx.site.tagline) + '</h1>',
-    '      <p class="lede">我们是北京科技大学的阜阳学长学姐。想查北科大在安徽的录取信息、了解专业和校园生活，或看看我们什么时候回阜阳宣讲，从这里开始。</p>',
-    '      <ul class="quick-asks">',
-    '        <li><a href="/resources/">查北科大在安徽的录取信息 <span aria-hidden="true">→</span></a></li>',
-    '        <li><a href="/faq/#cat-2">了解专业和校园生活 <span aria-hidden="true">→</span></a></li>',
-    '        <li><a href="/news/">看阜阳宣讲安排 <span aria-hidden="true">→</span></a></li>',
-    '      </ul>',
-    '      <div class="hero-actions">',
-    '        <a class="btn btn-primary" href="/faq/">先看答疑</a>',
-    '        <a class="btn btn-ghost" href="/resources/">查看资料</a>',
-    '      </div>',
-    '      <ul class="hero-stats">' + stats + '</ul>',
-    '    </div>',
-    '    <div class="hero-art">',
-    orbitRings(),
-    '      <div class="hero-mark">' + logoMark(210, { label: ctx.site.team + ' 队徽' }) + '</div>',
-    '      <p class="hero-slogan">' + esc(ctx.site.slogan) + '</p>',
-    '    </div>',
-    '  </div>',
-    '</section>',
-    '<section class="section entries">',
-    '  <div class="wrap">',
-    '    <div class="section-head"><h2>这里有什么</h2><p>三件事，做扎实就够了。</p></div>',
-    '    <div class="entry-grid">',
-    '      ' + entries,
-    '    </div>',
-    '  </div>',
-    '</section>',
-    news
-      ? [
-          '<section class="section latest">',
-          '  <div class="wrap">',
-          '    <div class="section-head"><h2>最新公告</h2><a class="link-more" href="/news/">全部公告 <span aria-hidden="true">→</span></a></div>',
-          '    <div class="news-list">',
-          '      ' + news,
-          '    </div>',
-          '  </div>',
-          '</section>',
-        ].join('\n')
-      : '',
-    '<section class="section cta">',
-    '  <div class="wrap cta-inner">',
-    '    <div>',
-    '      <h2>想问问阜阳的学长学姐？</h2>',
-    '      <p>关于学校、专业、志愿、复习节奏，都可以问。我们不一定知道全部答案，但会尽量说真话。</p>',
-    '    </div>',
-    '    <a class="btn btn-primary btn-lg" href="/ask/">查看答疑渠道</a>',
-    '  </div>',
-    '</section>',
-  ].join('\n');
-
-  return layout(ctx, { path: '/', title: '', active: '/', description: ctx.site.description }, body);
+  const tagline = esc(ctx.site.tagline).replace('带回阜阳', '<span>带回阜阳</span>');
+  const body = `
+    <section class="home-hero wrap" aria-labelledby="home-title">
+      <div class="home-hero-grid">
+        <div class="home-hero-copy">
+          <p class="home-overline">北京科技大学 · 阜阳寒招</p>
+          <h1 id="home-title">${tagline}</h1>
+          <p class="home-intro">我们是从阜阳走到北科大的学长学姐。报考怎么查，专业怎么选，大学怎么过，我们把知道的整理给你。</p>
+          <div class="home-actions">
+            <a class="home-primary" href="/resources/">查看报考资料 <span aria-hidden="true">↗</span></a>
+            <a class="home-secondary" href="/faq/">阅读学生答疑</a>
+          </div>
+        </div>
+        <figure class="home-campus">
+          <img src="/images/ustb-west-gate.webp" alt="从北京科技大学西门望向主楼和校园绿地" width="1400" height="1050" fetchpriority="high">
+          <figcaption><strong>北京科技大学 · 西门</strong><a href="/about/#image-credit">校园照片来源</a></figcaption>
+        </figure>
+      </div>
+    </section>
+    <section class="home-section wrap" aria-labelledby="home-tasks">
+      <div class="home-section-head">
+        <h2 id="home-tasks">你想先了解什么？</h2>
+        <a href="/ask/">联系小队 <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="home-tasks">${cards}</div>
+    </section>
+    <section class="home-section home-updates wrap" aria-label="小队近况">
+      <div class="home-news">
+        <div class="home-section-head"><h2>最新动态</h2><a href="/news/">所有公告</a></div>
+        ${news || '<p>宣讲安排确定后会在公告页发布。</p>'}
+      </div>
+      <div class="home-contact">
+        <h2>和阜阳学长学姐聊聊</h2>
+        <p>想问校园生活、专业体验或阜阳宣讲？查看小队当前的答疑渠道。</p>
+        <a href="/ask/">查看联系渠道 <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  `;
+  return layout(ctx, { path: '/', title: '', active: '/', bodyClass: 'home-page' }, body);
 }
 
 // ---------- 答疑 ----------
@@ -274,7 +236,9 @@ export function renderFaq(ctx) {
     '      <a class="side-cta" href="/ask/">查看答疑渠道</a>',
     '    </aside>',
     '    <div class="faq-main">',
-    ctx.faq.length ? groups : empty,
+    ctx.faq.length
+      ? '<div class="faq-search" data-faq-search hidden><label for="faq-query">搜索答疑</label><input class="search" id="faq-query" type="search" placeholder="试试「宿舍」或「转专业」"><p class="faq-search-status" role="status"></p></div>' + groups
+      : empty,
     '    </div>',
     '  </div>',
     '</section>',
@@ -458,7 +422,7 @@ export function renderResources(ctx) {
   const sections = groups
     .map(
       (g) =>
-        '<section class="res-group" data-group="' + esc(g.slug) + '">' +
+        '<section class="res-group" id="' + esc(g.slug) + '" data-group="' + esc(g.slug) + '">' +
         '<h2>' + esc(g.category) + '<span class="count">' + g.items.length + '</span></h2>' +
         '<div class="res-grid">' + g.items.map((item) => card(item, g.slug)).join('') + '</div>' +
         '</section>',
@@ -538,7 +502,10 @@ export function renderNewsPost(ctx, post) {
 export function renderAbout(ctx, html) {
   const body = [
     pageHero('ABOUT', '关于我们', ctx.site.org),
-    '<section class="section"><div class="wrap article-wrap"><div class="prose">' + html + '</div></div></section>',
+    '<section class="section"><div class="wrap article-wrap"><div class="prose">' + html,
+    '<h3 id="image-credit">图片来源</h3>',
+    '<p>首页的北京科技大学西门照片由 Ccyber5 拍摄，2008 年上传。本站对图片缩小尺寸并转换为 WebP，按 <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> 许可使用。<a href="https://commons.wikimedia.org/wiki/File:USTB_west_gate.jpg">查看原图</a></p>',
+    '</div></div></section>',
   ].join('\n');
   return layout(ctx, { path: '/about/', title: '关于', active: '/about/', description: ctx.site.description }, body);
 }

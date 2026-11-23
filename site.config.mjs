@@ -43,4 +43,5 @@ export const nav = [
   { label: '资料', href: '/resources/' },
   { label: '公告', href: '/news/' },
   { label: '关于', href: '/about/' },
+  { label: '联系', href: '/ask/' },
 ];
