@@ -25,8 +25,8 @@
     const caption = portraits.querySelector('.portrait-caption');
     function showPortrait(isBlue) {
       portraits.dataset.front = isBlue ? 'peony' : 'noodles';
-      caption.textContent = isBlue ? '皖小丹 · 丹丹' : '阜小穗 · 穗穗';
-      portraitSwitch.setAttribute('aria-label', isBlue ? '换一张，查看吉祥物阜小穗' : '换一张，查看吉祥物皖小丹');
+      caption.textContent = isBlue ? '徽徽' : '淮淮';
+      portraitSwitch.setAttribute('aria-label', isBlue ? '换一张，查看吉祥物淮淮' : '换一张，查看吉祥物徽徽');
     }
     showPortrait(false);
     portraitSwitch.addEventListener('click', () => showPortrait(portraits.dataset.front !== 'peony'));
