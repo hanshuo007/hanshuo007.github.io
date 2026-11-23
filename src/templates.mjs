@@ -12,10 +12,41 @@ function navItems(ctx, active) {
       const isActive = item.href === active;
       return (
         '<a class="nav-link' + (isActive ? ' is-active' : '') + '" href="' + item.href + '"' +
-        (isActive ? ' aria-current="page"' : '') + '>' + esc(item.label) + '</a>'
+        (isActive ? ' aria-current="page"' : '') + '>' + esc(item.label) +
+        (isActive ? '<span class="nav-station" aria-hidden="true"></span>' : '') + '</a>'
       );
     })
     .join('');
+}
+
+// Install before the first paint so restored pages and new documents use the same motion.
+function installPageMotion() {
+  const root = document.documentElement;
+  if ('onpagereveal' in window) {
+    window.addEventListener('pagereveal', (event) => {
+      delete root.dataset.turn;
+      if (!event.viewTransition) return;
+      const visit = window.navigation?.activation;
+      if (!visit?.from?.url) return;
+      const links = Array.from(document.querySelectorAll('.site-header .nav-link'));
+      function section(url) {
+        const path = new URL(url).pathname;
+        return links.findIndex(link => {
+          const target = link.pathname;
+          return path === target || (target !== links[0].pathname && path.startsWith(target));
+        });
+      }
+      const previous = section(visit.from.url);
+      const next = section(location.href);
+      const reverse = visit.navigationType === 'traverse'
+        ? visit.entry.index < visit.from.index
+        : previous >= 0 && next >= 0 && next < previous;
+      if (reverse) root.dataset.turn = 'back';
+    });
+  } else if (document.referrer && new URL(document.referrer).origin === location.origin &&
+             performance.getEntriesByType('navigation')[0]?.type === 'navigate') {
+    root.classList.add('soft-arrival');
+  }
 }
 
 function head(ctx, page) {
@@ -38,7 +69,7 @@ function head(ctx, page) {
     '<meta name="twitter:card" content="summary_large_image">',
     '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
     '<link rel="stylesheet" href="/assets/styles.css">',
-    '<script>' + THEME_SCRIPT + '</script>',
+    '<script>' + THEME_SCRIPT + '(' + installPageMotion.toString() + ')();</script>',
   ].join('\n    ');
 }
 

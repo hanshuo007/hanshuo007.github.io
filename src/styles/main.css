@@ -1818,3 +1818,74 @@ h3 {
   .guide-cover h3 { margin: 13px 0 8px; max-width: 100%; }
   .guide-cover p { margin-bottom: 17px; }
 }
+
+/* The moving station mark connects the same navigation on consecutive pages. */
+.nav .nav-link { position: relative; }
+.nav-station {
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 19px;
+  height: 5px;
+  transform: translateX(-50%);
+  color: var(--accent);
+  background: linear-gradient(currentColor, currentColor) left center / 14px 1px no-repeat,
+    radial-gradient(circle, currentColor 2px, transparent 2.5px) right center / 6px 5px no-repeat;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+
+  .site-header { view-transition-name: site-header; }
+  .nav-station { view-transition-name: station; }
+
+  ::view-transition {
+    background: linear-gradient(108deg, #647e64, #ddf49a 60%, #809c7c);
+    pointer-events: none;
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: 360ms;
+    animation-timing-function: cubic-bezier(.37,.03,.17,1);
+  }
+  ::view-transition-group(site-header) { z-index: 1; }
+  ::view-transition-group(station) { z-index: 2; }
+  ::view-transition-old(site-header) { animation: none; opacity: 0; }
+  ::view-transition-new(site-header) { animation: none; }
+  ::view-transition-old(station) { animation: none; opacity: 0; }
+  ::view-transition-new(station) { animation: none; }
+
+  /* Clip the two snapshots along parallel edges. The narrow space between them
+     exposes the route colour on the transition layer for the duration of the cut. */
+  ::view-transition-old(root), ::view-transition-new(root) {
+    mix-blend-mode: normal;
+    animation: depart-pane 360ms cubic-bezier(.37,.03,.17,1) both;
+  }
+  ::view-transition-new(root) { animation-name: arrive-pane; }
+  :root[data-turn="back"]::view-transition-old(root) { animation-name: depart-pane-back; }
+  :root[data-turn="back"]::view-transition-new(root) { animation-name: arrive-pane-back; }
+
+  @keyframes depart-pane {
+    from { clip-path: polygon(0 0, 109% 0, 101% 100%, 0 100%); }
+    to { clip-path: polygon(0 0, -1% 0, -9% 100%, 0 100%); }
+  }
+  @keyframes arrive-pane {
+    from { clip-path: polygon(110% 0, 100% 0, 100% 100%, 102% 100%); }
+    to { clip-path: polygon(0 0, 100% 0, 100% 100%, -8% 100%); }
+  }
+  @keyframes depart-pane-back {
+    from { clip-path: polygon(-9% 0, 100% 0, 100% 100%, -1% 100%); }
+    to { clip-path: polygon(101% 0, 100% 0, 100% 100%, 109% 100%); }
+  }
+  @keyframes arrive-pane-back {
+    from { clip-path: polygon(0 0, -10% 0, -2% 100%, 0 100%); }
+    to { clip-path: polygon(0 0, 100% 0, 108% 100%, 0 100%); }
+  }
+
+  .soft-arrival .site-main { animation: soft-arrival 180ms ease-out; }
+  @keyframes soft-arrival {
+    from { opacity: .8; transform: translateY(5px); }
+    to { opacity: 1; transform: none; }
+  }
+}
