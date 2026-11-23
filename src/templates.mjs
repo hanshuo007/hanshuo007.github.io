@@ -231,11 +231,11 @@ export function renderHome(ctx) {
         <div class="journey-shade"></div>
         <figure class="team-portraits">
           <div class="portrait-pair">
-            <img src="/images/team-noodles.webp" width="600" height="600" alt="戴着麦穗发饰、手捧两碗面的红衣吉祥物">
-            <img src="/images/team-peony.webp" width="600" height="600" alt="戴着塔纹头带、手持牡丹的蓝衣吉祥物">
+            <img src="/images/team-noodles.webp" width="600" height="600" alt="打道回阜队吉祥物阜小穗：戴麦穗发饰、手捧两碗面">
+            <img src="/images/team-peony.webp" width="600" height="600" alt="打道回阜队吉祥物皖小丹：戴塔纹头带、手持牡丹">
           </div>
           <figcaption>
-            <span class="portrait-caption" aria-live="polite">打道回阜队 · 小队吉祥物</span>
+            <span class="portrait-caption" aria-live="polite">阜小穗 · 穗穗</span>
             <button type="button" class="portrait-switch" hidden>换一张 <span aria-hidden="true">⇄</span></button>
           </figcaption>
         </figure>
