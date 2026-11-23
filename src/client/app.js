@@ -1,4 +1,4 @@
-// 站点交互：深浅色切换 + 资料筛选与搜索。没有框架，也没有依赖。
+// 站点交互：深浅色切换、寒招路线及答疑与资料搜索。没有第三方依赖。
 (function () {
   var root = document.documentElement;
 
@@ -17,6 +17,49 @@
         /* 隐身模式下 localStorage 可能不可用，忽略即可 */
       }
     });
+  }
+
+  var routeStops = document.querySelector('[data-route-stops]');
+  if (routeStops) {
+    var stops = Array.from(routeStops.querySelectorAll('[data-route-stop]'));
+    var panels = stops.map(function (stop) {
+      return document.getElementById(stop.getAttribute('aria-controls'));
+    });
+
+    function selectStop(index) {
+      routeStops.style.setProperty('--route-progress', String(index / (stops.length - 1)));
+      stops.forEach(function (stop, stopIndex) {
+        var active = stopIndex === index;
+        stop.setAttribute('aria-selected', String(active));
+        stop.tabIndex = active ? 0 : -1;
+        panels[stopIndex].hidden = !active;
+      });
+    }
+
+    routeStops.setAttribute('role', 'tablist');
+    stops.forEach(function (stop, index) {
+      stop.setAttribute('role', 'tab');
+      panels[index].setAttribute('role', 'tabpanel');
+      panels[index].setAttribute('aria-labelledby', stop.id);
+      stop.addEventListener('click', function () {
+        selectStop(index);
+      });
+      stop.addEventListener('keydown', function (event) {
+        var nextIndex;
+        switch (event.key) {
+          case 'ArrowLeft': nextIndex = (index + stops.length - 1) % stops.length; break;
+          case 'ArrowRight': nextIndex = (index + 1) % stops.length; break;
+          case 'Home': nextIndex = 0; break;
+          case 'End': nextIndex = stops.length - 1; break;
+          default: return;
+        }
+        event.preventDefault();
+        selectStop(nextIndex);
+        stops[nextIndex].focus();
+      });
+    });
+    selectStop(0);
+    routeStops.hidden = false;
   }
 
   var faqSearch = document.querySelector('[data-faq-search]');

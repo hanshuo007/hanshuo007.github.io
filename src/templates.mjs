@@ -28,7 +28,7 @@ function head(ctx, page) {
     '<title>' + esc(title) + '</title>',
     '<meta name="description" content="' + esc(description) + '">',
     '<link rel="canonical" href="' + esc(canonical) + '">',
-    '<meta name="theme-color" content="#551a2c">',
+    '<meta name="theme-color" content="#121e1b">',
     '<meta property="og:type" content="' + (page.ogType || 'website') + '">',
     '<meta property="og:site_name" content="' + esc(ctx.site.team) + '">',
     '<meta property="og:title" content="' + esc(title) + '">',
@@ -120,30 +120,57 @@ function pageHero(eyebrow, title, lede) {
 
 // ---------- 首页 ----------
 export function renderHome(ctx) {
-  const tasks = [
+  const stops = [
     {
-      title: '查安徽录取信息',
-      description: '从历年分数、当年招生计划和安徽省的投档信息入手。',
-      href: '/resources/#res-1',
+      id: 'admission',
+      name: '查录取',
+      title: '在安徽，怎么报北科大？',
+      description: '先在安徽省考试院查本省一分一段表，再对照北科大往年录取数据。填报前核对当年的招生计划和选科要求。',
+      links: [
+        ['北科大历年录取分数', 'https://zhaoshengyunzhi.ustb.edu.cn/zsw/lnfs.html'],
+        ['北科大分省招生计划', 'https://zhaoshengyunzhi.ustb.edu.cn/zsw/zsjh.html'],
+        ['查看报考资料', '/resources/#res-1'],
+      ],
     },
     {
-      title: '了解专业与校园',
-      description: '专业怎么选、大类怎么分流，宿舍和食堂是什么样。',
-      href: '/faq/#cat-2',
+      id: 'campus',
+      name: '选专业',
+      title: '读什么专业？在北科大怎么过？',
+      description: '先看学校的专业介绍，再读学长学姐整理的大类分流、转专业和校园生活答疑。',
+      links: [
+        ['北科大本科专业介绍', 'https://zhaosheng.ustb.edu.cn/xkzy/zyjs/index.htm'],
+        ['专业与培养答疑', '/faq/#cat-2'],
+        ['校园生活答疑', '/faq/#cat-3'],
+      ],
     },
     {
-      title: '看阜阳宣讲安排',
-      description: '进校时间、地点以及小队的最新动态都在这里。',
-      href: '/news/',
+      id: 'events',
+      name: '看宣讲',
+      title: '寒假回阜阳，在哪里见？',
+      description: '进校日期、学校和场次确定后，小队会在公告页更新。需要联系小队，可以查看目前开放的答疑渠道。',
+      links: [
+        ['查看阜阳宣讲公告', '/news/'],
+        ['查看小队联系渠道', '/ask/'],
+      ],
     },
   ];
-  const cards = tasks.map((task) => `
-    <a class="home-task" href="${task.href}">
-      <span class="task-icon" aria-hidden="true"><span></span></span>
-      <span class="task-arrow" aria-hidden="true">↗</span>
-      <h3>${esc(task.title)}</h3>
-      <p>${esc(task.description)}</p>
-    </a>
+
+  const stopButtons = stops.map((stop) => `
+    <button type="button" id="stop-${stop.id}" class="route-stop" data-route-stop aria-controls="route-${stop.id}">
+      <span class="route-marker" aria-hidden="true"></span>
+      <span>${esc(stop.name)}</span>
+    </button>
+  `).join('');
+  const stopDetails = stops.map((stop) => `
+    <section class="route-detail" id="route-${stop.id}" data-route-detail aria-labelledby="route-heading-${stop.id}">
+      <div class="route-detail-copy">
+        <h3 id="route-heading-${stop.id}">${esc(stop.title)}</h3>
+        <p>${esc(stop.description)}</p>
+      </div>
+      <ul class="route-links">
+        ${stop.links.map(([label, href]) => `<li><a href="${esc(href)}">${esc(label)}<span aria-hidden="true">↗</span></a></li>`).join('')}
+      </ul>
+    </section>
   `).join('');
   const news = ctx.news.slice(0, ctx.site.homeNewsCount).map((post) => `
     <a class="home-news-row" href="/news/${esc(post.slug)}/">
@@ -155,29 +182,39 @@ export function renderHome(ctx) {
 
   const tagline = esc(ctx.site.tagline).replace('带回阜阳', '<span>带回阜阳</span>');
   const body = `
-    <section class="home-hero wrap" aria-labelledby="home-title">
-      <div class="home-hero-grid">
-        <div class="home-hero-copy">
-          <p class="home-overline">北京科技大学 · 阜阳寒招</p>
-          <h1 id="home-title">${tagline}</h1>
-          <p class="home-intro">我们是从阜阳走到北科大的学长学姐。报考怎么查，专业怎么选，大学怎么过，我们把知道的整理给你。</p>
-          <div class="home-actions">
-            <a class="home-primary" href="/resources/">查看报考资料 <span aria-hidden="true">↗</span></a>
-            <a class="home-secondary" href="/faq/">阅读学生答疑</a>
+    <section class="home-hero" aria-labelledby="home-title">
+      <div class="wrap">
+        <div class="home-hero-stage">
+          <div class="home-hero-copy">
+            <p class="home-overline">北京科技大学 · 阜阳寒招</p>
+            <h1 id="home-title">${tagline}</h1>
+            <p class="home-intro">我们是从阜阳走到北科大的学长学姐。查录取、选专业、看宣讲，从这里出发。</p>
+            <div class="home-actions">
+              <a class="home-primary" href="#route">查看寒招路线 <span aria-hidden="true">↓</span></a>
+              <a class="home-secondary" href="/faq/">阅读学生答疑</a>
+            </div>
           </div>
+          <figure class="home-campus">
+            <img src="/images/ustb-west-gate.webp" alt="从北京科技大学西门望向主楼和校园绿地" width="1400" height="1050" fetchpriority="high">
+            <figcaption><strong>北科大西门</strong><a href="/about/#image-credit">照片来源</a></figcaption>
+          </figure>
         </div>
-        <figure class="home-campus">
-          <img src="/images/ustb-west-gate.webp" alt="从北京科技大学西门望向主楼和校园绿地" width="1400" height="1050" fetchpriority="high">
-          <figcaption><strong>北京科技大学 · 西门</strong><a href="/about/#image-credit">校园照片来源</a></figcaption>
-        </figure>
+        <div class="home-journey" aria-label="从北京到阜阳">
+          <span><strong>北京</strong><small lang="en">BEIJING</small></span>
+          <span class="journey-rail" aria-hidden="true"></span>
+          <span><strong>阜阳</strong><small lang="en">FUYANG</small></span>
+        </div>
       </div>
     </section>
-    <section class="home-section wrap" aria-labelledby="home-tasks">
+    <section class="home-section wrap" id="route" aria-labelledby="route-title" data-route>
       <div class="home-section-head">
-        <h2 id="home-tasks">你想先了解什么？</h2>
+        <h2 id="route-title">寒招路线图</h2>
         <a href="/ask/">联系小队 <span aria-hidden="true">↗</span></a>
       </div>
-      <div class="home-tasks">${cards}</div>
+      <div class="route-board">
+        <div class="route-stops" aria-label="寒招路线站点" data-route-stops hidden>${stopButtons}</div>
+        <div class="route-details">${stopDetails}</div>
+      </div>
     </section>
     <section class="home-section home-updates wrap" aria-label="小队近况">
       <div class="home-news">
@@ -185,9 +222,11 @@ export function renderHome(ctx) {
         ${news || '<p>宣讲安排确定后会在公告页发布。</p>'}
       </div>
       <div class="home-contact">
-        <h2>和阜阳学长学姐聊聊</h2>
-        <p>想问校园生活、专业体验或阜阳宣讲？查看小队当前的答疑渠道。</p>
-        <a href="/ask/">查看联系渠道 <span aria-hidden="true">↗</span></a>
+        <div>
+          <h2>想问学长学姐？</h2>
+          <p>看看小队目前开放的答疑渠道。</p>
+        </div>
+        <a href="/ask/" aria-label="查看小队答疑渠道"><span aria-hidden="true">↗</span></a>
       </div>
     </section>
   `;
