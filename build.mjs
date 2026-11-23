@@ -9,6 +9,7 @@ import { renderMarkdown, escapeHtml } from './src/markdown.mjs';
 import { logoFile } from './src/brand.mjs';
 import {
   renderHome,
+  renderGuide,
   renderFaq,
   renderAsk,
   renderResources,
@@ -113,6 +114,16 @@ async function loadNews() {
   return posts;
 }
 
+async function loadGuides() {
+  const dir = p(CONTENT, 'guides');
+  const guides = [];
+  for (const file of await listMarkdown(dir)) {
+    const { data, body } = parseFrontMatter(await fs.readFile(p(dir, file), 'utf8'));
+    guides.push({ ...data, slug: file.slice(0, -3), html: renderMarkdown(body) });
+  }
+  return guides.sort((a, b) => Number(a.order) - Number(b.order));
+}
+
 async function loadFaq() {
   const dir = p(CONTENT, 'faq');
   const files = await listMarkdown(dir);
@@ -152,7 +163,7 @@ async function loadResources() {
     .map((group, index) => ({
       category: group.name || '资料',
       slug: 'res-' + (index + 1),
-      items: Array.isArray(group.items) ? group.items : [],
+      items: Array.isArray(group.items) ? group.items.filter((item) => item.href) : [],
     }))
     .filter((group) => group.items.length > 0);
 }
@@ -279,11 +290,12 @@ async function build() {
   await fs.rm(DIST, { recursive: true, force: true });
   await fs.mkdir(DIST, { recursive: true });
 
-  const [news, faq, resources, aboutHtml] = await Promise.all([
+  const [news, faq, resources, aboutHtml, guides] = await Promise.all([
     loadNews(),
     loadFaq(),
     loadResources(),
     loadAbout(),
+    loadGuides(),
   ]);
 
   // 联系方式的二维码图片只有真的放进 public/ 才显示，否则页面上是「待上传」占位
@@ -309,6 +321,7 @@ async function build() {
     news,
     faq,
     resources,
+    guides,
     stats: {
       faqCount: faq.reduce((sum, group) => sum + group.items.length, 0),
       resourceCount: resources.reduce((sum, group) => sum + group.items.length, 0),
@@ -325,6 +338,12 @@ async function build() {
   await writePage('/news/', renderNewsList(ctx));
   await writePage('/about/', renderAbout(ctx, aboutHtml));
   await writePage('404.html', renderNotFound(ctx));
+
+  for (const guide of guides) {
+    const route = '/guides/' + guide.slug + '/';
+    await writePage(route, renderGuide(ctx, guide));
+    routes.push(route);
+  }
 
   for (const post of news) {
     const route = '/news/' + post.slug + '/';

@@ -199,7 +199,7 @@ export function renderHome(ctx) {
               <p>关于录取、专业和大学生活，<br>来听听阜阳学长学姐的回答。</p>
             </div>
           </div>
-          <a class="journey-skip" href="#route">查看寒招路线 <span aria-hidden="true">↘</span></a>
+          <div class="journey-actions"><a class="journey-skip" href="#route">查看寒招路线 <span aria-hidden="true">↘</span></a><a class="journey-album-link" href="#album">逛逛校园相册</a></div>
           <div class="journey-bottom">
             <div class="journey-timeline" aria-label="从北京到阜阳">
               <span>北京 <small lang="en">BEIJING</small></span>
@@ -221,6 +221,37 @@ export function renderHome(ctx) {
         <div class="route-details">${stopDetails}</div>
       </div>
     </section>
+    <section class="album-section" id="album" aria-labelledby="album-title">
+      <div class="wrap">
+        <div class="editorial-heading">
+          <div><h2 id="album-title">北科大，<em>镜头里的日常</em></h2>
+          <p>从银杏树下走到阅览室，再去球场边站一会儿。</p></div>
+          <a href="/about/#image-credit">照片出处 ↗</a>
+        </div>
+        <div class="campus-prints">
+          <figure class="campus-print print-lead">
+            <img src="/images/campus-ginkgo.webp" width="960" height="640" loading="lazy" alt="金黄色的银杏树冠下，同学们穿过校园小路">
+            <figcaption><time datetime="2017-10">2017.10</time><h3>银杏黄了</h3><p>十月的树荫，把路过的同学也收进了风景。</p></figcaption>
+          </figure>
+          <figure class="campus-print print-library">
+            <img src="/images/campus-library.webp" width="560" height="320" loading="lazy" alt="窗边一排排长桌前，学生正在阅读和自习">
+            <figcaption><time datetime="2010-05">2010.05</time><h3>靠窗的自习位</h3></figcaption>
+          </figure>
+          <figure class="campus-print print-field">
+            <img src="/images/campus-football.webp" width="560" height="320" loading="lazy" alt="从角旗旁望向正在比赛的北科大足球场">
+            <figcaption><time datetime="2017-10">2017.10</time><h3>从角旗看球场</h3></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+    <section class="wrap guide-shelf" id="handbook" aria-labelledby="handbook-title">
+      <div class="editorial-heading">
+        <div><h2 id="handbook-title">阜阳同学的<em>报考手册</em></h2>
+        <p>听宣讲前挑一篇读，带着自己的问题来。</p></div>
+        <a href="/resources/">资料下载 ↗</a>
+      </div>
+      <div class="guide-covers">${ctx.guides.map(guideCover).join('')}</div>
+    </section>
     <section class="home-section home-updates wrap" aria-label="小队近况">
       <div class="home-news">
         <div class="home-section-head"><h2>最新动态</h2><a href="/news/">所有公告</a></div>
@@ -236,6 +267,28 @@ export function renderHome(ctx) {
     </section>
   `;
   return layout(ctx, { path: '/', title: '', active: '/', bodyClass: 'home-page' }, body);
+}
+
+function guideCover(guide) {
+  return `<a href="/guides/${esc(guide.slug)}/" class="guide-cover cover-${esc(guide.slug)}">
+    <span class="cover-subject">${esc(guide.subject)}</span>
+    <h3>${esc(guide.title)}</h3><p>${esc(guide.summary)}</p>
+    <span class="cover-open">翻开手册 <span aria-hidden="true">↗</span></span>
+  </a>`;
+}
+
+export function renderGuide(ctx, guide) {
+  const body = `<article class="field-guide">
+    <header class="guide-mast cover-${esc(guide.slug)}"><div class="wrap article-wrap">
+      <a href="/#handbook">← 报考手册</a>
+      <p>${esc(guide.subject)}</p><h1>${esc(guide.title)}</h1>
+      <div class="guide-deck">${esc(guide.summary)}</div>
+    </div></header>
+    <div class="wrap article-wrap guide-reading"><div class="prose">${guide.html}</div>
+    <nav aria-label="其他手册" class="guide-next">${ctx.guides.filter(item => item !== guide)
+      .map(item => `<a href="/guides/${esc(item.slug)}/">${esc(item.title)} ↗</a>`).join('')}</nav></div>
+  </article>`;
+  return layout(ctx, { path: '/guides/' + guide.slug + '/', title: guide.title, description: guide.summary, ogType: 'article' }, body);
 }
 
 // ---------- 答疑 ----------
@@ -474,7 +527,7 @@ export function renderResources(ctx) {
     .join('');
 
   const body = [
-    pageHero('FILES', '资料分享', '查安徽投档信息、北科大招生计划和专业目录，可以直接打开下方的官方入口。小队资料上传后会在这里提供下载。'),
+    pageHero('FILES', '资料分享', '查安徽投档信息、北科大招生计划和专业目录，可以直接打开下方的官方入口。也可以下载小队整理的报考数据核对表和专业比较表。'),
     '<section class="section">',
     '  <div class="wrap">',
     '    <div class="res-toolbar">',
@@ -549,6 +602,8 @@ export function renderAbout(ctx, html) {
     '<section class="section"><div class="wrap article-wrap"><div class="prose">' + html,
     '<h3 id="image-credit">图片来源</h3>',
     '<p>首页的北京科技大学西门照片由 Ccyber5 拍摄，2008 年上传。本站对图片缩小尺寸并转换为 WebP，按 <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> 许可使用。<a href="https://commons.wikimedia.org/wiki/File:USTB_west_gate.jpg">查看原图</a></p>',
+    '<p>「银杏黄了」与「从角旗看球场」摄影为纳瓦拉的亨利，授权为 <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>。两图均缩放、转为 WebP 并在页面裁切，沿用原许可。原作见 <a href="https://commons.wikimedia.org/wiki/File:Ginkgo_trees_of_University_of_Science_and_Technology_Beijing_2017_01.jpg">银杏</a>、<a href="https://commons.wikimedia.org/wiki/File:Football_match_University_of_Science_and_Technology_Beijing_2017_-_01.jpg">足球比赛</a>。</p>',
+    '<p>「靠窗的自习位」摄影为 Ccyber5，作者将作品释入公有领域。<a href="https://commons.wikimedia.org/wiki/File:Reading_Room_For_SS_USTB_Library.jpg">阅览室原图</a></p>',
     '</div></div></section>',
   ].join('\n');
   return layout(ctx, { path: '/about/', title: '关于', active: '/about/', description: ctx.site.description }, body);
