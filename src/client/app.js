@@ -25,15 +25,19 @@
     var panels = stops.map(function (stop) {
       return document.getElementById(stop.getAttribute('aria-controls'));
     });
+    var selectedStop = -1;
 
     function selectStop(index) {
+      if (index === selectedStop) return;
       routeStops.style.setProperty('--route-progress', String(index / (stops.length - 1)));
       stops.forEach(function (stop, stopIndex) {
         var active = stopIndex === index;
         stop.setAttribute('aria-selected', String(active));
         stop.tabIndex = active ? 0 : -1;
+        panels[stopIndex].toggleAttribute('data-route-flip', active && selectedStop !== -1);
         panels[stopIndex].hidden = !active;
       });
+      selectedStop = index;
     }
 
     routeStops.setAttribute('role', 'tablist');

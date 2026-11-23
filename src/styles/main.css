@@ -656,12 +656,17 @@ h3 {
   background: #253019;
 }
 
+.route-details {
+  background: var(--surface-2);
+}
+
 .route-detail {
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
   align-items: center;
   min-height: 166px;
   border-top: 1px solid var(--border);
+  background: var(--surface);
 }
 
 .route-detail-copy {
@@ -821,13 +826,26 @@ h3 {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  [data-route-stops]:not([hidden]) + .route-details .route-detail:not([hidden]) {
-    animation: route-appear .22s ease-out;
+  .route-detail[data-route-flip] {
+    transform-origin: center top;
+    animation: route-flip .32s cubic-bezier(.2, .72, .28, 1);
   }
 
-  @keyframes route-appear {
-    from { opacity: .68; }
-    to { opacity: 1; }
+  @keyframes route-flip {
+    0% {
+      transform: perspective(950px) rotateX(-66deg);
+      opacity: .34;
+      box-shadow: 0 9px 12px -9px var(--border-strong);
+    }
+
+    70% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: none;
+      box-shadow: none;
+    }
   }
 }
 
