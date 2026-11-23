@@ -1890,7 +1890,7 @@ h3 {
   }
 }
 
-.mobile-dock, .mobile-ticket { display: none; }
+.mobile-dock { display: none; }
 @media (max-width: 700px) {
   :root {
     --dock-size: calc(62px + env(safe-area-inset-bottom, 0px));
@@ -1924,25 +1924,8 @@ h3 {
   }
   .journey.is-cinematic { height: 173svh; }
   .journey-screen { height: calc(100vh - var(--header-height) - var(--dock-size)); height: calc(100svh - var(--header-height) - var(--dock-size)); min-height: 500px; }
-  .journey-photo, .journey-credit { display: none; }
-  .journey-shade {
-    background: repeating-radial-gradient(ellipse at 103% 30%, transparent 0 15px,#e4f4ff0e 16px,transparent 17px),
-      linear-gradient(145deg,#1a405a 0%,#26566b 45%,#102f43 90%);
-  }
-  .mobile-ticket { display: grid; place-items: center; position: absolute; inset: 14% 0 auto; z-index: 0; opacity: var(--depart, 1); }
-  .ticket-paper {
-    width: min(76vw,340px); transform: rotate(-7deg); color: #143750; background: #fcf1d9;
-    border-radius: 7px; box-shadow: 7px 9px #d97b4e, 0 16px 24px #08213252; padding: 11px 16px;
-  }
-  .ticket-label,.ticket-stub,.ticket-route { display: flex; align-items: center; justify-content: space-between; }
-  .ticket-label { padding-bottom: 7px; border-bottom: 1px solid #caad88; font-size: .7rem; font-weight: 750; }
-  .ticket-label span { font: .6rem var(--mono); letter-spacing: .12em; }
-  .ticket-route { margin: 7px 0; }
-  .ticket-route span { font-size: clamp(1.45rem,6.8vw,2.1rem); line-height: 1.2; font-weight: 800; }
-  .ticket-route small { display: block; margin-top: 3px; font-size: .65rem; font-weight: 500; }
-  .ticket-route i { flex: .55; text-align: center; color: #ab5839; font-size: 1.5rem; }
-  .ticket-stub { padding-top: 6px; border-top: 1px dashed #a18c74; font-size: .63rem; }
-  .ticket-stub i { height: 10px; width: 68px; background: repeating-linear-gradient(90deg,#243f54 0 2px,transparent 2px 4px,#243f54 4px 5px,transparent 5px 7px); }
+  .journey-photo { object-position: center 42%; filter: saturate(.97); }
+  .journey-shade { background: linear-gradient(180deg, #172c275e 0%, transparent 25%, #11282026 40%, #09211ef0 83%, #09211e); }
   .journey-inner { padding: 17px 22px 15px; }
   .journey-titles { align-self: end; padding-bottom: 15px; }
   .journey-bottom { margin-top: 15px; padding-top: 10px; }
@@ -1954,12 +1937,6 @@ h3 {
   .journey-kicker { letter-spacing: .08em; }
   .journey-album-link { text-decoration: underline; text-underline-offset: 4px; border: 0; }
   .album-section .campus-prints { grid-template-rows: clamp(180px, 47vw, 240px) 130px; }
-}
-@media (max-width: 700px) and (max-height: 650px) {
-  .mobile-ticket { inset-block-start: 13%; }
-  .ticket-paper { width: 61vw; padding: 8px 12px; }
-  .ticket-route { margin: 4px 0; }
-  .ticket-route span { font-size: 1.4rem; }
 }
 @media (max-width: 700px) and (prefers-reduced-motion: no-preference) {
   .mobile-dock { view-transition-name: mobile-dock; }
@@ -1982,3 +1959,11 @@ h3 {
 .photo-archive { border-top: 1px solid #f1edd54a; }
 .photo-archive summary { cursor: pointer; padding: 13px 0; color: #e2e6d8; }
 .archive-credit { display: inline-block; margin-top: 12px; color: #e2e6d8; text-decoration: underline; }
+.autumn-strip { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-bottom: 24px; }
+.autumn-strip figure { margin: 0; position: relative; }
+.autumn-strip img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; }
+.autumn-strip figcaption { position: absolute; bottom: 0; inset-inline: 0; padding: 40px 16px 13px; background: linear-gradient(transparent,#192018de); color: white; }
+@media (max-width: 700px) {
+  .autumn-strip { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; }
+  .autumn-strip figure { flex: 0 0 85%; scroll-snap-align: start; }
+}

@@ -76,7 +76,7 @@ function head(ctx, page) {
     '<meta property="og:title" content="' + esc(title) + '">',
     '<meta property="og:description" content="' + esc(description) + '">',
     '<meta property="og:url" content="' + esc(canonical) + '">',
-    '<meta property="og:image" content="' + esc(ctx.site.url + '/images/ustb-west-gate.webp') + '">',
+    '<meta property="og:image" content="' + esc(ctx.site.url + '/images/autumn-ding.webp') + '">',
     '<meta name="twitter:card" content="summary_large_image">',
     '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
     '<link rel="stylesheet" href="/assets/styles.css">',
@@ -227,14 +227,8 @@ export function renderHome(ctx) {
   const body = `
     <section class="journey" aria-labelledby="home-title" data-journey>
       <div class="journey-screen">
-        <img class="journey-photo" src="/images/ustb-west-gate.webp" alt="从北京科技大学西门望向校园" width="1400" height="1050" fetchpriority="high">
+        <img class="journey-photo" src="/images/autumn-ding.webp" width="1099" height="1470" alt="银杏黄叶映衬下的校园方鼎" fetchpriority="high">
         <div class="journey-shade"></div>
-        <div class="mobile-ticket" aria-label="寒招回程票，从北京学院路到安徽阜阳">
-          <div class="ticket-paper"><div class="ticket-label">寒招回程票 <span lang="en">BOARDING PASS</span></div>
-            <div class="ticket-route"><span>北京<small>学院路</small></span><i aria-hidden="true">→</i><span>阜阳<small>安徽</small></span></div>
-            <div class="ticket-stub"><span>打道回阜队</span><i aria-hidden="true"></i></div>
-          </div>
-        </div>
         <canvas class="journey-map" aria-hidden="true"></canvas>
         <div class="journey-inner">
           <div class="journey-kicker"><span aria-hidden="true">↘</span> 北京科技大学 · 阜阳寒招</div>
@@ -248,14 +242,14 @@ export function renderHome(ctx) {
               <p>关于录取、专业和大学生活，<br>来听听阜阳学长学姐的回答。</p>
             </div>
           </div>
-          <div class="journey-actions"><a class="journey-skip" href="#route">查看寒招路线 <span aria-hidden="true">↘</span></a><a class="journey-album-link" href="#handbook">翻开报考手册</a></div>
+          <div class="journey-actions"><a class="journey-skip" href="#route">查看寒招路线 <span aria-hidden="true">↘</span></a><a class="journey-album-link" href="#album">看校园秋景</a></div>
           <div class="journey-bottom">
             <div class="journey-timeline" aria-label="从北京到阜阳">
               <span>北京 <small lang="en">BEIJING</small></span>
               <i aria-hidden="true"></i>
               <span>阜阳 <small lang="en">FUYANG</small></span>
             </div>
-            <a class="journey-credit" href="/about/#image-credit">北科大西门 · 摄影来源</a>
+
           </div>
         </div>
       </div>
@@ -281,9 +275,14 @@ export function renderHome(ctx) {
     <section class="album-section" id="album" aria-labelledby="album-title">
       <div class="wrap">
         <div class="editorial-heading">
-          <div><h2 id="album-title">看看最近的<em>北科大</em></h2>
-          <p>北科大新闻网的「菁彩校园」持续收录校园摄影。</p></div>
+          <div><h2 id="album-title">北科大的<em>秋天</em></h2>
+          <p>鼎前的银杏、印着 USTB 的气球，还有抬头望见的金色树冠。</p></div>
           <a href="https://news.ustb.edu.cn/stkj/tsbk/jcxy.htm">去看近期校园照片 ↗</a>
+        </div>
+        <div class="autumn-strip" tabindex="0" role="region" aria-label="北科大秋景相册，可横向浏览">
+          <figure><img src="/images/autumn-ding.webp" width="1099" height="1470" alt="方鼎背后是满树金黄的银杏" loading="lazy"><figcaption>银杏树下的方鼎</figcaption></figure>
+          <figure><img src="/images/autumn-balloon.webp" width="1100" height="1377" alt="红色 USTB 爱心气球与手中的校园明信片" loading="lazy"><figcaption>把秋天装进明信片</figcaption></figure>
+          <figure><img src="/images/autumn-canopy.webp" width="1023" height="1470" alt="沿树干仰望层层叠叠的金黄银杏叶" loading="lazy"><figcaption>抬头，满树金黄</figcaption></figure>
         </div>
         <details class="photo-archive"><summary>翻阅校园旧照 · 2010 至 2017</summary>
         <div class="campus-prints">
@@ -652,7 +651,7 @@ export function renderAbout(ctx, html) {
     pageHero('ABOUT', '关于我们', ctx.site.org),
     '<section class="section"><div class="wrap article-wrap"><div class="prose">' + html,
     '<h3 id="image-credit">图片来源</h3>',
-    '<p>首页的北京科技大学西门照片由 Ccyber5 拍摄，2008 年上传。本站对图片缩小尺寸并转换为 WebP，按 <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> 许可使用。<a href="https://commons.wikimedia.org/wiki/File:USTB_west_gate.jpg">查看原图</a></p>',
+    '<p>首页方鼎与银杏、USTB 爱心气球和银杏树冠三张照片由打道回阜队提供。</p>',
     '<p>「银杏黄了」与「从角旗看球场」摄影为纳瓦拉的亨利，授权为 <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>。两图均缩放、转为 WebP 并在页面裁切，沿用原许可。原作见 <a href="https://commons.wikimedia.org/wiki/File:Ginkgo_trees_of_University_of_Science_and_Technology_Beijing_2017_01.jpg">银杏</a>、<a href="https://commons.wikimedia.org/wiki/File:Football_match_University_of_Science_and_Technology_Beijing_2017_-_01.jpg">足球比赛</a>。</p>',
     '<p>「靠窗的自习位」摄影为 Ccyber5，作者将作品释入公有领域。<a href="https://commons.wikimedia.org/wiki/File:Reading_Room_For_SS_USTB_Library.jpg">阅览室原图</a></p>',
     '</div></div></section>',
