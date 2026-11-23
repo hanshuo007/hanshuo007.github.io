@@ -647,6 +647,7 @@ export function renderNewsPost(ctx, post) {
 export function renderAbout(ctx, html) {
   const body = [
     pageHero('ABOUT', '关于我们', ctx.site.org),
+    '<p><a class="btn btn-primary" href="/brand/">看队徽与海报</a></p>',
     '<section class="section"><div class="wrap article-wrap"><div class="prose">' + html,
     '<h3 id="image-credit">图片来源</h3>',
     '<p>首页方鼎与银杏、USTB 爱心气球和银杏树冠三张照片由打道回阜队提供。</p>',
@@ -655,6 +656,44 @@ export function renderAbout(ctx, html) {
     '</div></div></section>',
   ].join('\n');
   return layout(ctx, { path: '/about/', title: '关于', active: '/about/', description: ctx.site.description }, body);
+}
+
+
+export function renderBrand(ctx) {
+  const body = [
+    pageHero('BRAND', '形象与物料', '队徽、宣传海报与「阜见北科」双城纪念'),
+    '<section class="section"><div class="wrap">',
+    '<div class="brand-grid">',
+    '<figure class="brand-card brand-card--emblem">',
+    '  <img src="/images/emblem.webp" width="900" height="901" loading="lazy" alt="打道回阜队队徽：红蓝飘带环绕，文峰塔与亭台立于水岸，外圈书「打道回阜」与 USTB">',
+    '  <figcaption><h2>队徽</h2>',
+    '  <p>红色取自北科大校色，蓝色取自淮河与颍水。塔与亭是阜阳，水波是回家的路，船是我们这一程。</p>',
+    '  <a class="btn btn-ghost" href="/images/emblem.webp" download>下载队徽</a></figcaption>',
+    '</figure>',
+    '</div>',
+    '<h2 class="brand-sub">宣传海报</h2>',
+    '<div class="brand-grid">',
+    '<figure class="brand-card brand-card--tall">',
+    '  <img src="/images/poster-v.webp" width="900" height="1545" loading="lazy" alt="竖版宣传海报「阜见北科」：阜阳文峰塔与北科大主楼隔水相望，中间列车票样式写着阜阳站到北科大">',
+    '  <figcaption><h3>竖版 · 双城纪念</h3>',
+    '  <p>适合群公告长图、朋友圈。</p>',
+    '  <a class="btn btn-ghost" href="/images/poster-v.webp" download>下载竖版</a></figcaption>',
+    '</figure>',
+    '<figure class="brand-card">',
+    '  <img src="/images/poster-h.webp" width="1400" height="743" loading="lazy" alt="横版宣传海报「阜见北科」：左侧阜阳文峰塔与城市天际线，右侧北科大主楼与求实鼎新碑，中间同一张车票">',
+    '  <figcaption><h3>横版 · 三联票根</h3>',
+    '  <p>适合公众号头图、PPT 封面、易拉宝。</p>',
+    '  <a class="btn btn-ghost" href="/images/poster-h.webp" download>下载横版</a></figcaption>',
+    '</figure>',
+    '</div>',
+    '<div class="brand-note">',
+    '<h2>使用说明</h2>',
+    '<p>队徽与海报均由小队美工文创组设计，供本队寒招宣传使用。转发、打印、二次排版都可以，标明出处「打道回阜队」即可，请勿用于商业用途。</p>',
+    '<p>需要矢量源文件（AI / PSD）或改年份版本，与管理组联系。</p>',
+    '</div>',
+    '</div></section>',
+  ].join('\n');
+  return layout(ctx, { path: '/brand/', title: '形象与物料', active: '/brand/', description: '打道回阜队队徽、宣传海报与双城纪念物料' }, body);
 }
 
 export function renderNotFound(ctx) {
