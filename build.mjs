@@ -15,7 +15,6 @@ import {
   renderResources,
   renderNewsList,
   renderNewsPost,
-  renderBrand,
   renderAbout,
   renderNotFound,
 } from './src/templates.mjs';
@@ -330,14 +329,13 @@ async function build() {
     },
   };
 
-  const routes = ['/', '/faq/', '/ask/', '/resources/', '/news/', '/brand/', '/about/'];
+  const routes = ['/', '/faq/', '/ask/', '/resources/', '/news/', '/about/'];
 
   await writePage('/', renderHome(ctx));
   await writePage('/faq/', renderFaq(ctx));
   await writePage('/ask/', renderAsk(ctx));
   await writePage('/resources/', renderResources(ctx));
   await writePage('/news/', renderNewsList(ctx));
-  await writePage('/brand/', renderBrand(ctx));
   await writePage('/about/', renderAbout(ctx, aboutHtml));
   await writePage('404.html', renderNotFound(ctx));
 
