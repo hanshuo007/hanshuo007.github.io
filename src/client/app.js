@@ -19,6 +19,20 @@
     });
   }
 
+  const portraitSwitch = document.querySelector('.portrait-switch');
+  if (portraitSwitch) {
+    const portraits = portraitSwitch.closest('figure');
+    const caption = portraits.querySelector('.portrait-caption');
+    function showPortrait(isBlue) {
+      portraits.dataset.front = isBlue ? 'peony' : 'noodles';
+      caption.textContent = isBlue ? '蓝衣 · 持牡丹' : '红衣 · 捧双碗';
+      portraitSwitch.setAttribute('aria-label', isBlue ? '换一张，查看红衣吉祥物' : '换一张，查看蓝衣吉祥物');
+    }
+    showPortrait(false);
+    portraitSwitch.addEventListener('click', () => showPortrait(portraits.dataset.front !== 'peony'));
+    portraitSwitch.hidden = false;
+  }
+
   var routeStops = document.querySelector('[data-route-stops]');
   if (routeStops) {
     var stops = Array.from(routeStops.querySelectorAll('[data-route-stop]'));
@@ -275,6 +289,7 @@ function initCampusJourney(scene) {
     const dissolve = smooth((progress - .16) / .52);
     set('zoom', 1 + .25 * smooth(progress / .64));
     set('depart', 1 - smooth((progress - .12) / .32));
+    set('portrait-visibility', progress >= .44 ? 'hidden' : 'visible');
     set('lift', -45 * smooth(progress / .55) + 'px');
     set('map-opacity', dissolve);
     set('arrive', smooth((progress - .46) / .29));

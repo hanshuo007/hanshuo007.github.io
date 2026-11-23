@@ -1994,3 +1994,42 @@ h3 {
   .team-portraits { top: 50px; width: min(72%, 222px); }
   .journey-titles { margin-block: 0; }
 }
+
+.team-portraits[data-front] {
+  z-index: 1;
+  visibility: var(--portrait-visibility, visible);
+}
+.team-portraits[data-front] .portrait-pair {
+  position: relative;
+  aspect-ratio: 1.87;
+  isolation: isolate;
+}
+.team-portraits[data-front] img {
+  position: absolute; inset: 0 auto 0 12%;
+  height: 100%; width: auto; border-radius: 6px;
+  background: white; mix-blend-mode: normal;
+  box-shadow: 0 2px 7px #3e2f1c26;
+}
+.team-portraits[data-front="noodles"] img:first-child,
+.team-portraits[data-front="peony"] img:last-child {
+  z-index: 1; transform: translateX(-3%) rotate(-3deg);
+}
+.team-portraits[data-front="noodles"] img:last-child,
+.team-portraits[data-front="peony"] img:first-child {
+  transform: translateX(66%) scale(.70) rotate(7deg);
+  opacity: .75;
+}
+.team-portraits[data-front] figcaption {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 4px; margin-top: 6px; padding: 3px 3px 0; text-align: left;
+}
+.portrait-switch {
+  color: #2c4f49; background: #f0ead7;
+  padding: 3px 8px; border: 0; border-radius: 12px;
+  font: inherit; font-weight: 700; cursor: pointer; touch-action: manipulation;
+}
+.portrait-switch::after { content: ''; position: absolute; inset: 0; z-index: 2; border-radius: 8px; }
+.portrait-switch:focus-visible::after { outline: 3px solid #294f82; outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .team-portraits[data-front] img { transition: transform .28s cubic-bezier(.21,.74,.29,1), opacity .2s; }
+}
