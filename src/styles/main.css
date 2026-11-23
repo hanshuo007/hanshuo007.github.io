@@ -2033,3 +2033,10 @@ h3 {
 @media (prefers-reduced-motion: no-preference) {
   .team-portraits[data-front] img { transition: transform .28s cubic-bezier(.21,.74,.29,1), opacity .2s; }
 }
+
+/* 首屏校门照：picture 不占布局，横竖两版按视口切换 */
+.journey-photo-wrap { display: contents; }
+.journey-photo--gate { object-position: 50% 42%; filter: saturate(.92); }
+@media (max-width: 760px) {
+  .journey-photo--gate { object-position: 50% center; }
+}
