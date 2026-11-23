@@ -2060,3 +2060,6 @@ h3 {
 /* 海报两列：窄竖版 + 宽横版 */
 .brand-grid--posters { grid-template-columns: minmax(0, 400px) minmax(0, 1fr); }
 @media (max-width: 860px) { .brand-grid--posters { grid-template-columns: 1fr; } }
+
+.footer-mark { display: inline-flex; width: 32px; height: 32px; flex: none; }
+.footer-mark-img { display: block; width: 100%; height: 100%; border-radius: 50%; }
