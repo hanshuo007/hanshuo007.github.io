@@ -2047,3 +2047,7 @@ h3 {
 .brand-note h2 { margin: 0 0 10px; font-size: 1.15rem; }
 .brand-note p { margin: 0 0 8px; color: var(--fg-muted); line-height: 1.85; }
 @media (max-width: 700px) { .brand-grid { gap: 16px; grid-template-columns: 1fr; } }
+
+/* 海报两列：窄竖版 + 宽横版 */
+.brand-grid--posters { grid-template-columns: minmax(0, 400px) minmax(0, 1fr); }
+@media (max-width: 860px) { .brand-grid--posters { grid-template-columns: 1fr; } }
