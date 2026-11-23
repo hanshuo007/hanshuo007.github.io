@@ -76,10 +76,10 @@ function head(ctx, page) {
     '<meta property="og:title" content="' + esc(title) + '">',
     '<meta property="og:description" content="' + esc(description) + '">',
     '<meta property="og:url" content="' + esc(canonical) + '">',
-    '<meta property="og:image" content="' + esc(ctx.site.url + '/images/autumn-ding.webp') + '">',
+    '<meta property="og:image" content="' + esc(ctx.site.url + '/images/ustb-gate.webp') + '">',
     '<meta name="twitter:card" content="summary_large_image">',
     '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
-    '<link rel="preload" as="image" href="/images/autumn-ding.webp" fetchpriority="high">',
+    '<link rel="preload" as="image" href="/images/ustb-gate.webp" fetchpriority="high">',
     '<link rel="stylesheet" href="/assets/styles.css">',
     '<script>' + THEME_SCRIPT + '(' + installPageMotion.toString() + ')();</script>',
   ].join('\n    ');
@@ -228,15 +228,18 @@ export function renderHome(ctx) {
   const body = `
     <section class="journey" aria-labelledby="home-title" data-journey>
       <div class="journey-screen">
-        <img class="journey-photo" src="/images/autumn-ding.webp" width="760" height="1017" alt="银杏黄叶映衬下的校园方鼎" fetchpriority="high">
+        <picture class="journey-photo-wrap">
+                  <source media="(max-width: 760px)" srcset="/images/ustb-gate-portrait.webp">
+                  <img class="journey-photo journey-photo--gate" src="/images/ustb-gate.webp" width="1100" height="825" alt="北京科技大学主楼与楼前的毛主席像" fetchpriority="high">
+                </picture>
         <div class="journey-shade"></div>
         <figure class="team-portraits">
           <div class="portrait-pair">
-            <img src="/images/team-noodles.webp" width="520" height="520" alt="打道回阜队吉祥物阜小穗：戴麦穗发饰、手捧两碗面">
-            <img src="/images/team-peony.webp" width="520" height="520" alt="打道回阜队吉祥物皖小丹：戴塔纹头带、手持牡丹">
+            <img src="/images/team-noodles.webp" width="520" height="520" alt="打道回阜队吉祥物淮淮：戴麦穗发饰、手捧两碗面">
+            <img src="/images/team-peony.webp" width="520" height="520" alt="打道回阜队吉祥物徽徽：戴塔纹头带、手持牡丹">
           </div>
           <figcaption>
-            <span class="portrait-caption" aria-live="polite">阜小穗 · 穗穗</span>
+            <span class="portrait-caption" aria-live="polite">淮淮</span>
             <button type="button" class="portrait-switch" hidden>换一张 <span aria-hidden="true">⇄</span></button>
           </figcaption>
         </figure>
