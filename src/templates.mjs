@@ -1,6 +1,5 @@
 // 页面模板：纯字符串拼接，没有模板引擎，也就没有依赖。
 import { escapeHtml as esc } from './markdown.mjs';
-import { logoMark } from './brand.mjs';
 
 const THEME_SCRIPT =
   "(function(){try{var s=localStorage.getItem('theme');" +
@@ -78,7 +77,9 @@ function head(ctx, page) {
     '<meta property="og:url" content="' + esc(canonical) + '">',
     '<meta property="og:image" content="' + esc(ctx.site.url + '/images/ustb-gate.webp') + '">',
     '<meta name="twitter:card" content="summary_large_image">',
-    '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
+    '<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">',
+    '<link rel="icon" href="/favicon-64.png" sizes="64x64" type="image/png">',
+    '<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">',
     '<link rel="preload" as="image" href="/images/ustb-gate.webp" fetchpriority="high">',
     '<link rel="stylesheet" href="/assets/styles.css">',
     '<script>' + THEME_SCRIPT + '(' + installPageMotion.toString() + ')();</script>',
@@ -112,7 +113,7 @@ function footer(ctx) {
     '<footer class="site-footer">',
     '  <div class="wrap footer-inner">',
     '    <div class="footer-brand">',
-    '      <span class="footer-mark">' + logoMark(32) + '</span>',
+    '      <span class="footer-mark"><img class="footer-mark-img" src="/images/emblem-mark.webp" width="32" height="32" alt="" decoding="async"></span>',
     '      <div>',
     '        <p class="footer-team">' + esc(ctx.site.team) + '</p>',
     '        <p class="footer-org">' + esc(ctx.site.org) + '</p>',
