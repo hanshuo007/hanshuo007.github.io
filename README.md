@@ -103,7 +103,9 @@ tags: [公告]
 
 ## 四、上线
 
-站点已经上线：**https://hanshuo007.github.io/**（GitHub Pages，免费、无水印）。
+站点已经上线：**https://dadaohuifu.cn/**（自有域名 + GitHub Pages，免费、无水印、已启用强制 HTTPS）。
+
+> 备用地址：<https://hanshuo007.github.io>（会自动 301 跳到正式域名）。
 
 > 仓库名是 `hanshuo007.github.io`，所以这是 GitHub 的**用户站**，站点直接挂在域名根路径。仓库名必须一字不差，改名就会掉到 `/仓库名/` 子路径、根地址直接 404 —— 这个坑我们已经踩过一次。
 
