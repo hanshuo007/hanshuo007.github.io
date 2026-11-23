@@ -356,6 +356,9 @@ async function build() {
   await fs.mkdir(p(DIST, 'assets'), { recursive: true });
   await fs.copyFile(p(ROOT, 'src', 'styles', 'main.css'), p(DIST, 'assets', 'styles.css'));
   await fs.copyFile(p(ROOT, 'src', 'client', 'app.js'), p(DIST, 'assets', 'app.js'));
+  for (const f of ['favicon-32.png', 'favicon-64.png', 'apple-touch-icon.png']) {
+    await fs.copyFile(p(ROOT, 'public', f), p(DIST, f));
+  }
   await fs.writeFile(p(DIST, 'favicon.svg'), logoFile(), 'utf8');
   await fs.mkdir(p(DIST, 'brand'), { recursive: true });
   await fs.writeFile(p(DIST, 'brand/logo.svg'), logoFile(), 'utf8');
