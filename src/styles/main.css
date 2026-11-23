@@ -1967,3 +1967,30 @@ h3 {
   .autumn-strip { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; }
   .autumn-strip figure { flex: 0 0 85%; scroll-snap-align: start; }
 }
+
+/* A single print keeps the two original mascots together at every width. */
+.team-portraits {
+  position: absolute; right: 8%; top: 15%; width: min(36%, 490px); margin: 0;
+  padding: 10px 10px 7px; color: #3f3d31; background: #fffcf2;
+  border: 1px solid #fdf4d8; border-radius: 8px;
+  box-shadow: 4px 5px #e6be78, 0 12px 25px #142a264a;
+  transform: translateY(var(--lift,0px)) rotate(2deg); opacity: var(--depart,1);
+}
+.portrait-pair { display: flex; align-items: center; }
+.portrait-pair img { display: block; width: 50%; height: auto; mix-blend-mode: multiply; }
+.team-portraits figcaption {
+  margin-top: 3px; padding-top: 4px; border-top: 1px solid #d5bc91;
+  font-size: clamp(.68rem, 1.05vw, .87rem); text-align: center; letter-spacing: .12em;
+}
+@media (max-width: 700px) {
+  .team-portraits {
+    right: auto; left: 50%; top: clamp(56px,10%,84px); width: min(82%, 46svh);
+    padding: 6px 6px 4px; transform: translate(-50%,var(--lift,0px)) rotate(-2deg);
+  }
+  .team-portraits figcaption { margin: 0; padding-top: 2px; }
+}
+@media (max-width: 700px) and (max-height: 650px) {
+  .journey-screen { min-height: 590px; }
+  .team-portraits { top: 50px; width: min(72%, 222px); }
+  .journey-titles { margin-block: 0; }
+}

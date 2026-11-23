@@ -229,6 +229,13 @@ export function renderHome(ctx) {
       <div class="journey-screen">
         <img class="journey-photo" src="/images/autumn-ding.webp" width="1099" height="1470" alt="银杏黄叶映衬下的校园方鼎" fetchpriority="high">
         <div class="journey-shade"></div>
+        <figure class="team-portraits">
+          <div class="portrait-pair">
+            <img src="/images/team-noodles.webp" width="600" height="600" alt="戴着麦穗发饰、手捧两碗面的红衣吉祥物">
+            <img src="/images/team-peony.webp" width="600" height="600" alt="戴着塔纹头带、手持牡丹的蓝衣吉祥物">
+          </div>
+          <figcaption>打道回阜队 · 小队吉祥物</figcaption>
+        </figure>
         <canvas class="journey-map" aria-hidden="true"></canvas>
         <div class="journey-inner">
           <div class="journey-kicker"><span aria-hidden="true">↘</span> 北京科技大学 · 阜阳寒招</div>
