@@ -672,7 +672,7 @@ export function renderBrand(ctx) {
     '</figure>',
     '</div>',
     '<h2 class="brand-sub">宣传海报</h2>',
-    '<div class="brand-grid">',
+    '<div class="brand-grid brand-grid--posters">',
     '<figure class="brand-card brand-card--tall">',
     '  <img src="/images/poster-v.webp" width="900" height="1545" loading="lazy" alt="竖版宣传海报「阜见北科」：阜阳文峰塔与北科大主楼隔水相望，中间列车票样式写着阜阳站到北科大">',
     '  <figcaption><h3>竖版 · 双城纪念</h3>',
