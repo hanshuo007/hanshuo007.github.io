@@ -230,7 +230,8 @@ export function renderHome(ctx) {
     <section class="journey" aria-labelledby="home-title" data-journey>
       <div class="journey-screen">
         <picture class="journey-photo-wrap">
-                  <source media="(max-width: 760px)" srcset="/images/ustb-gate-portrait.webp">
+          <source type="image/avif" media="(max-width: 760px)" srcset="/images/ustb-gate-portrait.avif">
+          <source media="(max-width: 760px)" srcset="/images/ustb-gate-portrait.webp">
                   <img class="journey-photo journey-photo--gate" src="/images/ustb-gate.webp" width="1100" height="825" alt="北京科技大学主楼与楼前的毛主席像" fetchpriority="high">
                 </picture>
         <div class="journey-shade"></div>
@@ -293,6 +294,9 @@ export function renderHome(ctx) {
           <div><h2 id="album-title">北科大的<em>秋天</em></h2>
           <p>鼎前的银杏、印着 USTB 的气球，还有抬头望见的金色树冠。</p></div>
           <a href="https://news.ustb.edu.cn/stkj/tsbk/jcxy.htm">去看近期校园照片 ↗</a>
+        </div>
+        <div class="album-picker" role="group" aria-label="选择秋景照片" hidden>
+          <button type="button">方鼎</button><button type="button">明信片</button><button type="button">树冠</button>
         </div>
         <div class="autumn-strip" tabindex="0" role="region" aria-label="北科大秋景相册，可横向浏览">
           <figure><img src="/images/autumn-ding.webp" width="760" height="1017" alt="方鼎背后是满树金黄的银杏" loading="lazy"><figcaption>银杏树下的方鼎</figcaption></figure>
@@ -683,9 +687,8 @@ export function renderAbout(ctx, html) {
     '</div></section>',
     '<section class="section"><div class="wrap article-wrap"><div class="prose">',
     '<h3 id="image-credit">图片来源</h3>',
-    '<p>首页方鼎与银杏、USTB 爱心气球和银杏树冠三张照片由打道回阜队提供。</p>',
-    '<p>「银杏黄了」与「从角旗看球场」摄影为纳瓦拉的亨利，授权为 <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>。两图均缩放、转为 WebP 并在页面裁切，沿用原许可。原作见 <a href="https://commons.wikimedia.org/wiki/File:Ginkgo_trees_of_University_of_Science_and_Technology_Beijing_2017_01.jpg">银杏</a>、<a href="https://commons.wikimedia.org/wiki/File:Football_match_University_of_Science_and_Technology_Beijing_2017_-_01.jpg">足球比赛</a>。</p>',
-    '<p>「靠窗的自习位」摄影为 Ccyber5，作者将作品释入公有领域。<a href="https://commons.wikimedia.org/wiki/File:Reading_Room_For_SS_USTB_Library.jpg">阅览室原图</a></p>',
+    '<p>西门首图摄影为 Ccyber5，按 <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> 使用。本站对照片作了缩放、裁切与格式转换。<a href="https://commons.wikimedia.org/wiki/File:USTB_west_gate.jpg">查看原图</a></p>',
+    '<p>相册里的方鼎与银杏、USTB 爱心气球和银杏树冠三张照片由打道回阜队提供。</p>',
     '</div></div></section>',
   ].join('\n');
   return layout(ctx, { path: '/about/', title: '关于', active: '/about/', description: ctx.site.description }, body);

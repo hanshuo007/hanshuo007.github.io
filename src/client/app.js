@@ -33,6 +33,31 @@
     portraitSwitch.hidden = false;
   }
 
+  const picker = document.querySelector('.album-picker');
+  if (picker) {
+    const strip = picker.nextElementSibling;
+    const slides = Array.from(strip.children);
+    const buttons = Array.from(picker.querySelectorAll('button'));
+    function snapPosition(slide) {
+      return Math.min(slide.offsetLeft - slides[0].offsetLeft, strip.scrollWidth - strip.clientWidth);
+    }
+    function updateSelection() {
+      const distances = slides.map(slide => Math.abs(snapPosition(slide) - strip.scrollLeft));
+      const current = distances.indexOf(Math.min(...distances));
+      buttons.forEach((button, index) => button.setAttribute('aria-pressed', String(index === current)));
+    }
+    buttons.forEach((button, index) => button.addEventListener('click', () => {
+      strip.scrollTo({
+        left: snapPosition(slides[index]),
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      });
+    }));
+    strip.addEventListener('scroll', updateSelection, { passive: true });
+    window.addEventListener('resize', updateSelection);
+    updateSelection();
+    picker.hidden = false;
+  }
+
   var routeStops = document.querySelector('[data-route-stops]');
   if (routeStops) {
     var stops = Array.from(routeStops.querySelectorAll('[data-route-stop]'));
