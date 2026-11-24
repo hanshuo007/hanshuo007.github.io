@@ -32,7 +32,10 @@ function navItems(ctx, active, dock = false) {
 // Install before the first paint so restored pages and new documents use the same motion.
 function installPageMotion() {
   const root = document.documentElement;
-  if ('onpagereveal' in window) {
+  // Leave native links in control in Tencent's embedded browsers.
+  if (/MicroMessenger|\bQQ\/|QQTheme\//i.test(navigator.userAgent)) return;
+  if ('onpagereveal' in window && 'onpageswap' in window) {
+    document.getElementById('page-transitions').media = '(prefers-reduced-motion: no-preference)';
     window.addEventListener('pagereveal', (event) => {
       delete root.dataset.turn;
       if (!event.viewTransition) return;
@@ -81,7 +84,8 @@ function head(ctx, page) {
     '<link rel="icon" href="/favicon-64.png" sizes="64x64" type="image/png">',
     '<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">',
     '<link rel="preload" as="image" href="/images/ustb-gate.webp" fetchpriority="high">',
-    '<link rel="stylesheet" href="/assets/styles.css">',
+    '<link rel="stylesheet" href="/assets/styles.css?v=mobile-nav-2">',
+    '<style id="page-transitions" media="not all">@view-transition { navigation: auto; }</style>',
     '<script>' + THEME_SCRIPT + '(' + installPageMotion.toString() + ')();</script>',
   ].join('\n    ');
 }

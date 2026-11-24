@@ -1827,8 +1827,6 @@ h3 {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  @view-transition { navigation: auto; }
-
   .site-header { view-transition-name: site-header; }
   .nav-station { view-transition-name: station; }
 
@@ -1885,9 +1883,12 @@ h3 {
 .mobile-dock { display: none; }
 @media (max-width: 700px) {
   :root {
-    --dock-size: calc(62px + env(safe-area-inset-bottom, 0px));
+    --dock-size: 62px;
     scroll-padding-top: 68px;
     scroll-padding-bottom: calc(var(--dock-size) + 12px);
+  }
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    :root { --dock-size: calc(62px + env(safe-area-inset-bottom, 0px)); }
   }
   body { padding-bottom: var(--dock-size); }
   .site-header .nav { display: none; }
@@ -1895,7 +1896,8 @@ h3 {
   .site-header .brand-org { display: block; font-size: .62rem; }
   .site-header .theme-toggle { margin-left: auto; min-width: 44px; height: 44px; }
   .mobile-dock {
-    position: fixed; z-index: 55; bottom: 0; inset-inline: 0; display: flex;
+    position: fixed; z-index: 55; bottom: 0; left: 0; right: 0; display: flex;
+    padding: 2px 7px 0;
     padding: 2px max(7px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(7px, env(safe-area-inset-left));
     min-height: var(--dock-size); background: var(--surface); border-top: 1px solid var(--border-strong);
     box-shadow: 0 -4px 22px #1025200e;
@@ -1903,8 +1905,9 @@ h3 {
   .mobile-dock .nav-link {
     position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center;
     justify-content: center; gap: 2px; padding: 4px 0; border-radius: 12px; font-size: .74rem; line-height: 1.3;
-    -webkit-tap-highlight-color: transparent;
+    min-height: 48px; touch-action: manipulation;
   }
+  .mobile-dock .nav-link svg { pointer-events: none; }
   .mobile-dock .nav-link.is-active { color: var(--accent); background: transparent; font-weight: 750; }
   .mobile-dock .nav-link:active { background: var(--surface-2); }
   .mobile-dock .nav-station {
@@ -2110,6 +2113,23 @@ h3 {
 .guide-cover::before { opacity: .22; }
 .autumn-strip figure { padding: 6px 6px 0; background: #f6f1e5; color: #283b31; }
 .autumn-strip figcaption { position: static; background: transparent; color: inherit; padding: 8px 7px 10px; font-size: .9rem; }
+@media (min-width: 761px) {
+  .journey {
+    --print-left: 24%;
+    --print-top: 0%;
+    --print-width: 76%;
+    --print-height: 100%;
+  }
+  .journey-photo-wrap, .journey-map {
+    border-radius: 0;
+    outline: 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent 1%, rgba(0,0,0,.12) 13%, rgba(0,0,0,.88) 36%, #000 49%);
+    mask-image: linear-gradient(90deg, transparent 1%, rgba(0,0,0,.12) 13%, rgba(0,0,0,.88) 36%, #000 49%);
+  }
+  .journey-photo-wrap .journey-photo { object-position: 50% 12%; filter: saturate(.94); }
+  .journey-inner { background: linear-gradient(to top, var(--paper) 0%, transparent 32%); }
+  .team-portraits { right: 5%; bottom: 12%; }
+}
 @media (max-width: 760px) {
   .journey {
     --print-top: 0px;
