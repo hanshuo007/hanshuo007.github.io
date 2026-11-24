@@ -15,16 +15,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pages:
-    name: GitHub Pages
+  build:
+    name: 构建站点
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      pages: read
     steps:
       - uses: actions/checkout@v4
 
@@ -44,5 +40,17 @@ jobs:
         with:
           path: dist
 
+  pages:
+    needs: build
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v5
