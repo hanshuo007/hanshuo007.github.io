@@ -84,7 +84,7 @@ function head(ctx, page) {
     '<link rel="icon" href="/favicon-64.png" sizes="64x64" type="image/png">',
     '<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">',
     '<link rel="preload" as="image" href="/images/ustb-gate.webp" fetchpriority="high">',
-    '<link rel="stylesheet" href="/assets/styles.css?v=mobile-nav-2">',
+    '<link rel="stylesheet" href="/assets/styles.css?v=full-photo-restore">',
     '<style id="page-transitions" media="not all">@view-transition { navigation: auto; }</style>',
     '<script>' + THEME_SCRIPT + '(' + installPageMotion.toString() + ')();</script>',
   ].join('\n    ');
@@ -238,6 +238,7 @@ export function renderHome(ctx) {
           <source media="(max-width: 760px)" srcset="/images/ustb-gate-portrait.webp">
                   <img class="journey-photo journey-photo--gate" src="/images/ustb-gate.webp" width="1100" height="825" alt="北京科技大学主楼与楼前的毛主席像" fetchpriority="high">
                 </picture>
+        <div class="journey-shade"></div>
         <figure class="team-portraits">
           <div class="portrait-pair">
             <img src="/images/team-noodles.webp" width="520" height="520" alt="打道回阜队吉祥物淮淮：戴麦穗发饰、手捧两碗面">

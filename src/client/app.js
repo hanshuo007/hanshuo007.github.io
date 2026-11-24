@@ -212,8 +212,8 @@ function initCampusJourney(scene) {
   const smooth = t => { const x = limit(t); return x * x * (3 - 2 * x); };
 
   function prepareMap() {
-    width = canvas.clientWidth;
-    height = canvas.clientHeight;
+    width = panel.clientWidth;
+    height = panel.clientHeight;
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
     for (const surface of [canvas, terrain]) {
       surface.width = Math.round(width * ratio);
@@ -221,6 +221,7 @@ function initCampusJourney(scene) {
     }
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     pen.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const narrow = width <= 680;
     const field = pen.createLinearGradient(0, height, width, 0);
     field.addColorStop(0, '#0b211e');
     field.addColorStop(.55, '#14362f');
@@ -251,8 +252,8 @@ function initCampusJourney(scene) {
     fade.addColorStop(.7, '#091d1900');
     pen.fillStyle = fade;
     pen.fillRect(0, 0, width, height);
-    start = [width * .65, height * .21];
-    end = [width * .32, height * .76];
+    start = [width * (narrow ? .81 : .77), height * (narrow ? .15 : .21)];
+    end = [width * (narrow ? .57 : .63), height * (narrow ? .42 : .7)];
     bend1 = [start[0] + width * .11, start[1] + height * .22];
     bend2 = [end[0] - width * .14, end[1] - height * .16];
     previous = -1;
