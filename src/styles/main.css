@@ -2052,3 +2052,85 @@ h3 {
   }
   .album-picker button[aria-pressed="true"] { color: #152c27; background: #ebdba5; border-color: #ebdba5; font-weight: 700; }
 }
+
+/* Campus photo and route map share one mat, like facing pages in an album. */
+.journey {
+  --mast-serif: "Songti SC", "STSong", "Noto Serif CJK SC", SimSun, serif;
+  --print-left: 49%;
+  --print-top: 12%;
+  --print-width: 44%;
+  --print-height: 61%;
+  color: var(--fg);
+  background: var(--paper);
+}
+.journey-screen {
+  background: radial-gradient(ellipse at 77% 19%, color-mix(in srgb, #b29866 12%, transparent), transparent 65%), var(--paper);
+  border-bottom: 1px solid var(--border);
+}
+.journey-photo-wrap, .journey-map {
+  position: absolute;
+  inset: var(--print-top) auto auto var(--print-left);
+  display: block;
+  width: var(--print-width);
+  height: var(--print-height);
+  overflow: hidden;
+  border-radius: 40% 40% 2px 2px / 21% 21% 2px 2px;
+}
+.journey-photo-wrap {
+  outline: 1px solid var(--border-strong);
+  outline-offset: 5px;
+  background: var(--surface-2);
+}
+.journey-photo-wrap .journey-photo { object-position: 52% 27%; filter: saturate(.84); }
+.journey-titles { max-width: 48%; }
+.journey-kicker { color: var(--fg-soft); font-weight: 600; }
+.journey-kicker span { color: var(--accent); border-color: var(--border-strong); }
+.journey-titles h1, .journey-titles .arrival-title {
+  font-family: var(--mast-serif); font-weight: 650; line-height: 1.15; letter-spacing: -.055em;
+}
+.journey-titles h1 span, .arrival-title strong { color: var(--accent); font-weight: inherit; }
+.journey-titles p { max-width: 25em; color: var(--fg-soft); line-height: 1.85; text-shadow: none; }
+.journey-skip { color: #fffaf0; background: #29483e; border-color: #29483e; }
+.journey-skip span { color: #29483e; background: #f1e3be; }
+.journey-album-link { color: var(--fg); border-color: var(--border-strong); }
+.journey-bottom { border-color: var(--border-strong); }
+.journey-timeline i { background: var(--border-strong); }
+.journey-timeline i::after { background: var(--accent); box-shadow: none; }
+.team-portraits {
+  inset: auto 5% 16% auto; width: clamp(180px, 19vw, 278px);
+  border-color: #d8cdb8; border-radius: 3px; box-shadow: 0 5px 18px #162a202e;
+  transform: translateY(var(--lift,0px)) rotate(3deg);
+}
+.team-portraits figcaption { letter-spacing: .055em; }
+.home-section-head h2, .editorial-heading h2, .guide-cover h3, .page-hero h1 {
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", SimSun, serif;
+  font-weight: 650; line-height: 1.28;
+}
+.guide-cover h3 { margin-top: 24px; }
+.guide-cover::before { opacity: .22; }
+.autumn-strip figure { padding: 6px 6px 0; background: #f6f1e5; color: #283b31; }
+.autumn-strip figcaption { position: static; background: transparent; color: inherit; padding: 8px 7px 10px; font-size: .9rem; }
+@media (max-width: 760px) {
+  .journey {
+    --print-top: 56px;
+    --print-left: 7%;
+    --print-width: 86%;
+    --print-height: clamp(162px, 31%, 296px);
+  }
+  .journey-inner { padding-inline: 7%; }
+  .journey-photo-wrap, .journey-map { border-radius: 48% 48% 2px 2px / 17% 17% 2px 2px; }
+  .journey-photo-wrap .journey-photo { object-position: 50% 20%; }
+  .team-portraits {
+    inset: calc(var(--print-top) + var(--print-height) - 54px) 6% auto auto;
+    width: clamp(135px, 37vw, 194px); transform: translateY(var(--lift,0px)) rotate(3deg);
+  }
+  .journey-titles { align-self: end; max-width: none; padding-bottom: 16px; }
+  .journey-titles h1, .journey-titles .arrival-title { font-size: clamp(2.65rem, min(12.3vw, 7.1svh), 4.5rem); }
+  .journey-titles p { font-size: .93rem; line-height: 1.7; }
+  .journey-actions { gap: 20px; }
+  .journey-album-link { border: 0; }
+  .guide-cover h3 { margin-top: 14px; }
+}
+@media (max-width: 760px) and (max-height: 740px) {
+  .journey-screen { min-height: 625px; }
+}

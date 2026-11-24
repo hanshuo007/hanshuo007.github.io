@@ -122,7 +122,7 @@ function footer(ctx) {
     '    <nav class="footer-nav" aria-label="页脚导航">' + navItems(ctx, null) + '</nav>',
     '    <div class="footer-meta">',
     '      <p>更新于 ' + esc(ctx.build.dateText) + '</p>',
-    '      <p><a href="/rss.xml">公告 RSS</a> · <a href="/sitemap.xml">站点地图</a></p>',
+    '      <p><a href="/rss.xml">公告 RSS</a> · <a href="/sitemap.xml">站点地图</a> · <a href="/images/site-qr.png">网站二维码</a></p>',
     '      <p class="footer-note">本站由小队成员共同维护，内容仅供高中生与家长参考；正式招生政策以学校与省考试院发布为准。</p>',
     '    </div>',
     '  </div>',
@@ -234,7 +234,6 @@ export function renderHome(ctx) {
           <source media="(max-width: 760px)" srcset="/images/ustb-gate-portrait.webp">
                   <img class="journey-photo journey-photo--gate" src="/images/ustb-gate.webp" width="1100" height="825" alt="北京科技大学主楼与楼前的毛主席像" fetchpriority="high">
                 </picture>
-        <div class="journey-shade"></div>
         <figure class="team-portraits">
           <div class="portrait-pair">
             <img src="/images/team-noodles.webp" width="520" height="520" alt="打道回阜队吉祥物淮淮：戴麦穗发饰、手捧两碗面">
@@ -251,7 +250,7 @@ export function renderHome(ctx) {
           <div class="journey-titles">
             <div class="journey-departure">
               <h1 id="home-title">${tagline}</h1>
-              <p>从学院路出发，回阜阳见。<br>我们把大学里的见闻，带回给正在选方向的你。</p>
+              <p>从学院路出发，回阜阳见。<br>把大学里的见闻，带给正在选方向的你。</p>
             </div>
             <div class="journey-arrival" aria-hidden="true">
               <span class="arrival-title">下一站，<strong>阜阳。</strong></span>
