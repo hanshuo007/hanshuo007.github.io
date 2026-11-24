@@ -2112,16 +2112,29 @@ h3 {
 .autumn-strip figcaption { position: static; background: transparent; color: inherit; padding: 8px 7px 10px; font-size: .9rem; }
 @media (max-width: 760px) {
   .journey {
-    --print-top: 56px;
-    --print-left: 7%;
-    --print-width: 86%;
-    --print-height: clamp(162px, 31%, 296px);
+    --print-top: 0px;
+    --print-left: 0%;
+    --print-width: 100%;
+    --print-height: 60%;
   }
   .journey-inner { padding-inline: 7%; }
-  .journey-photo-wrap, .journey-map { border-radius: 48% 48% 2px 2px / 17% 17% 2px 2px; }
-  .journey-photo-wrap .journey-photo { object-position: 50% 20%; }
+  .journey-photo-wrap, .journey-map {
+    border-radius: 0;
+    outline: 0;
+    -webkit-mask-image: linear-gradient(to bottom, #000 56%, rgba(0,0,0,.93) 67%, rgba(0,0,0,.52) 80%, rgba(0,0,0,.1) 93%, transparent);
+    mask-image: linear-gradient(to bottom, #000 56%, rgba(0,0,0,.93) 67%, rgba(0,0,0,.52) 80%, rgba(0,0,0,.1) 93%, transparent);
+  }
+  .journey-photo-wrap .journey-photo { object-position: 50% 0%; filter: saturate(.94); }
+  .journey-kicker {
+    justify-self: start;
+    align-self: start;
+    padding: 4px 12px 4px 5px;
+    border-radius: 99px;
+    background: var(--paper);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+  }
   .team-portraits {
-    inset: calc(var(--print-top) + var(--print-height) - 54px) 6% auto auto;
+    inset: calc(var(--print-height) - 100px) 5% auto auto;
     width: clamp(135px, 37vw, 194px); transform: translateY(var(--lift,0px)) rotate(3deg);
   }
   .journey-titles { align-self: end; max-width: none; padding-bottom: 16px; }
