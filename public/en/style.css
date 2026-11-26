@@ -60,3 +60,9 @@ dialog[open] nav a:nth-child(2){animation-delay:.04s}dialog[open] nav a:nth-chil
 @media(min-width:701px){.story-ready .outreach-print::before{background-size:auto 220%}}
 @media(max-height:535px){.story-ready .card .outreach-print{width:23%;min-height:85px;flex:0 0 23%}.story-ready .outreach-print::before{width:100%;background-size:auto 220%}.story-ready .outreach-print>span{align-self:end;margin:0;background:#edf0e0}}
 .outreach-print::before,.story-ready .outreach-print::before{background-size:365% auto;background-position:left center}
+
+.story-ready #visits{height:480vh;height:480svh}
+.story-ready #tunnel{position:absolute;top:76%;left:0;width:1px;height:1px;pointer-events:none}
+#world .tunnel-film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:var(--flight-alpha,0);pointer-events:none}
+#world.live .tunnel-film{visibility:hidden}
+@media(prefers-reduced-motion:reduce){#world .tunnel-film{display:none}}

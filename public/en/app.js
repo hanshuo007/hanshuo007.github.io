@@ -13,7 +13,7 @@ function ramp(start, end, value) {
 const scenes = chapters.map((chapter, index) => {
   const pin = document.createElement('div');
   pin.className = 'chapter-pin';
-  pin.append(...chapter.children);
+  pin.append(...chapter.querySelectorAll(':scope > .cover, :scope > .brief, :scope > .deck'));
   chapter.append(pin);
   const [cover,brief,deck]=pin.children;
   const title=cover.firstElementChild;
@@ -40,6 +40,8 @@ const scenes = chapters.map((chapter, index) => {
 document.documentElement.classList.add('story-ready');
 
 const count=chapters.length;
+const flightChapter=count-1;
+const flightExit=.915;
 const wrap=(value,period)=>((value%period)+period)%period;
 let tops,lengths,cycle,goal=0,playhead=0,frame=0,last=0,recenterTimer=0;
 function measure(){
@@ -72,18 +74,21 @@ function setLayer(el,alpha,shift){
 function paint(){
   const wrapped=wrap(playhead,count), i=Math.floor(wrapped), p=wrapped-i;
   const incoming=(i+1)%count;
-  const dominant=p>.875?incoming:i;
+  const exit=i===flightChapter?flightExit:.73;
+  const blend=ramp(exit,1,p);
+  const dominant=blend>.55?incoming:i;
   world.dataset.position=String(wrapped);
   world.dataset.chapter=i;
   world.style.setProperty('--next-scene', 'url(assets/scene-'+incoming+'.webp)');
-  world.style.setProperty('--blend',ramp(.73,1,p));
+  world.style.setProperty('--blend',blend);
+  world.style.setProperty('--flight-alpha',i===flightChapter?1-blend:incoming===flightChapter?blend:0);
   for(const [n,s] of scenes.entries()){
-    const visible=n===i||(n===incoming&&p>.845);
+    const visible=n===i||(n===incoming&&p>exit+.40*(1-exit));
     s.indicator.setAttribute('aria-current',String(n===dominant));
     s.indicator.style.setProperty('--fill',(n<i?1:n===i?p:0).toFixed(3));
     s.pin.hidden=!visible;
     if(!visible)continue;
-    const t=n===i?p:p-1;
+    const t=n===i?p*(i===flightChapter?1.5:1):(p-1)*(.27/(1-exit));
     const enter=ramp(-.155,-.006,t);
     const leave=ramp(.105,.265,t);
     const titleAlpha=enter*(1-leave);
@@ -96,12 +101,27 @@ function paint(){
     setLayer(s.deck,deckIn*(1-deckOut),motion.matches?0:48*(1-deckIn)-32*deckOut);
   }
 }
+const tunnelFilm=world.querySelector('.tunnel-film');
+let filmPlaying=false;
+function syncTunnelFilm(){
+  const p=Number(world.dataset.position)||0;
+  const wanted=!document.hidden&&!motion.matches&&!world.classList.contains('live')&&p>flightChapter-.26;
+  if(wanted===filmPlaying)return;
+  filmPlaying=wanted;
+  if(wanted){
+    if(!tunnelFilm.hasAttribute('src'))tunnelFilm.src='assets/tunnel-flight.mp4';
+    tunnelFilm.play().catch(()=>{});
+  }else tunnelFilm.pause();
+}
+new MutationObserver(syncTunnelFilm).observe(world,{attributes:true,attributeFilter:['class']});
+document.addEventListener('visibilitychange',syncTunnelFilm);
+motion.addEventListener('change',syncTunnelFilm);
 function tick(now){
   const dt=last?Math.min(.1,(now-last)/1000):1/60; last=now;
   const distance=goal-playhead;
   playhead+=distance*(motion.matches?1:1-Math.exp(-12*dt));
   if(Math.abs(goal-playhead)<.00015)playhead=goal;
-  paint();
+  paint();syncTunnelFilm();
   if(playhead!==goal)frame=requestAnimationFrame(tick);
   else {frame=0;last=0;}
 }
@@ -116,14 +136,14 @@ function onScroll(){
   if(!frame)frame=requestAnimationFrame(tick);
 }
 function onResize(){measure();onScroll();}
-measure();playhead=goal=position();paint();
+measure();playhead=goal=position();paint();syncTunnelFilm();
 addEventListener('scroll',onScroll,{passive:true});
 addEventListener('resize',onResize);
 addEventListener('pageshow',onResize);
 motion.addEventListener('change',onScroll);
 nextStop.addEventListener('click',()=>{
   const distance=position(), lap=Math.floor(distance/count), here=wrap(distance,count);
-  const stops=chapters.flatMap((_,i)=>[i,i+.35,i+.68]);
+  const stops=chapters.flatMap((_,i)=>i===flightChapter?[i,i+.35/1.5,i+.68/1.5,i+.76]:[i,i+.35,i+.68]);
   const dest=stops.find(value=>value>here+.012)??count;
   const chapter=Math.floor(dest)%count;
   const target=(lap+Number(dest===count))*cycle+tops[chapter]+(dest%1)*lengths[chapter];
