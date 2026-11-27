@@ -71,7 +71,7 @@ function setLayer(el,alpha,shift){
   if(el.inert===interactive)el.inert=!interactive;
   el.style.visibility=alpha>.001?'visible':'hidden';
 }
-const soundtrack=createSoundtrack(document.querySelector('#sound'));
+const soundtrack=createSoundtrack(document.querySelector('#mute-music'));
 function paint(){
   const wrapped=wrap(playhead,count), i=Math.floor(wrapped), p=wrapped-i;
   const incoming=(i+1)%count;
@@ -202,11 +202,9 @@ for(const deck of document.querySelectorAll('.deck')){
 function createSoundtrack(button){
   const Context=window.AudioContext||window.webkitAudioContext;
   const buffers=new Map();
-  let context,session,music,effect,enabled=false,generation=0,lastBoundary=-1,cents=0;
-  function label(text){
-    button.title=text;button.setAttribute('aria-label',text);
-    button.setAttribute('aria-pressed',String(enabled));
-  }
+  if(!Context){button.hidden=true;return {transition(){}};}
+  let context,session,music,effect,muted=false,pageAway=false,generation=0,lastBoundary=-1,cents=0;
+  const wanted=()=>!muted&&!pageAway&&!document.hidden;
   function load(name){
     if(!buffers.has(name)){
       const pending=fetch('assets/sounds/'+name+'.mp3')
@@ -217,34 +215,36 @@ function createSoundtrack(button){
     }
     return buffers.get(name);
   }
-  function stop(immediate=false){
-    enabled=false;generation++;
-    if(session){
-      const output=session,now=context.currentTime,tail=immediate?0:.20;
-      output.gain.cancelScheduledValues(now);
-      output.gain.setValueAtTime(immediate?0:output.gain.value,now);
-      output.gain.linearRampToValueAtTime(0,now+tail);
-      for(const node of [music,effect])if(node)node.stop(now+tail);
-      setTimeout(()=>output.disconnect(),tail*1000+100);
-    }
-    session=music=effect=null;label('Enable sound');
+  function pause(){
+    generation++;
+    if(effect){effect.stop();effect=null;}
+    if(context&&context.state==='running')context.suspend().catch(()=>{});
   }
-  async function toggle(){
-    if(enabled){stop();return;}
-    const attempt=++generation;
-    enabled=true;label('Loading sound — click to mute');
+  async function playMusic(){
+    if(music||!wanted()||context.state!=='running')return;
+    const stamp=generation;
+    const buffer=await load('music');
+    if(music||!wanted()||stamp!==generation||context.state!=='running')return;
+    session=context.createGain();session.connect(context.destination);
+    session.gain.setValueAtTime(0,context.currentTime);
+    session.gain.linearRampToValueAtTime(.72,context.currentTime+.65);
+    music=context.createBufferSource();music.buffer=buffer;music.loop=true;
+    music.detune.value=cents;music.connect(session);music.start();
+    load('fx').catch(()=>{});
+  }
+  function start(){
+    if(!wanted())return;
     try{
-      context??=new Context();
-      const unlocked=context.resume();
-      load('fx').catch(()=>{});
-      const [,buffer]=await Promise.all([unlocked,load('music')]);
-      if(attempt!==generation)return;
-      session=context.createGain();session.connect(context.destination);
-      const now=context.currentTime;
-      session.gain.setValueAtTime(0,now);session.gain.linearRampToValueAtTime(.72,now+.65);
-      music=context.createBufferSource();music.buffer=buffer;music.loop=true;
-      music.detune.value=cents;music.connect(session);music.start();label('Mute sound');
-    }catch{if(attempt===generation){stop(true);label('Sound unavailable — retry');}}
+      if(!context){
+        context=new Context();
+        context.onstatechange=()=>{
+          if(context.state!=='running')return;
+          if(wanted())playMusic().catch(()=>{});else pause();
+        };
+      }
+      if(context.state==='running')playMusic().catch(()=>{});
+      else context.resume().catch(()=>{});
+    }catch{/* Retry on the next activation when audio is available. */}
   }
   function transition(chapter,blend){
     cents=-1200*(1-Math.abs(1-2*blend));
@@ -252,18 +252,27 @@ function createSoundtrack(button){
     if(blend<=.002||blend>=.998){lastBoundary=-1;return;}
     if(blend<.025||blend>.975||lastBoundary===chapter)return;
     lastBoundary=chapter;
-    if(!music)return;
+    if(!music||!wanted()||context.state!=='running')return;
     const stamp=generation;
     load('fx').then(buffer=>{
-      if(stamp!==generation||!music||lastBoundary!==chapter)return;
+      if(stamp!==generation||!wanted()||context.state!=='running'||lastBoundary!==chapter)return;
       if(effect)effect.stop();
       const node=context.createBufferSource();node.buffer=buffer;node.connect(session);effect=node;
       node.onended=()=>{node.disconnect();if(effect===node)effect=null;};
       node.start();
     }).catch(()=>{});
   }
-  button.hidden=!Context;button.onclick=toggle;
-  document.addEventListener('visibilitychange',()=>{if(document.hidden&&enabled)stop(true);});
-  window.addEventListener('pagehide',()=>{if(enabled)stop(true);});
+  button.onclick=()=>{
+    muted=!muted;button.textContent=muted?'Unmute sound':'Mute sound';
+    if(muted)pause();else start();
+  };
+  // resume() may stay pending until a trusted input. Call it within that input too.
+  for(const event of ['pointerdown','pointerup','click','keydown']){
+    window.addEventListener(event,start,{capture:true,passive:true});
+  }
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();else start();});
+  window.addEventListener('pagehide',()=>{pageAway=true;pause();});
+  window.addEventListener('pageshow',()=>{pageAway=false;start();});
+  start();
   return {transition};
 }
