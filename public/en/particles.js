@@ -17,6 +17,62 @@
   window.addEventListener('pointerup',e=>{if(e.pointerType==='touch')release();});
   window.addEventListener('pointercancel',release);
   function smooth(a,b,t){const v=Math.max(0,Math.min(1,(t-a)/(b-a)));return v*v*(3-2*v);}
+  // Project the same circular flight path, open rings and offset light rails as the 3D scene.
+  function drawTunnel(weight,phase){
+    const tau=Math.PI*2,trackRadius=2.560405,tubeRadius=.267,stations=32;
+    const heading=tau*(time*.54+phase*2.4)/4;
+    const lens=h/(2*Math.tan((w<h?79:70)*Math.PI/360));
+    const yaw=.19,roll=.12*Math.sin(time*.4);
+    const cyaw=Math.cos(yaw),syaw=Math.sin(yaw),cr=Math.cos(roll),sr=Math.sin(roll);
+    function project(a,angle,r){
+      // Coordinates in the camera's moving tangent frame.
+      const radius=trackRadius+r*Math.cos(angle);
+      const radial=radius*Math.cos(a)-trackRadius,forward=radius*Math.sin(a);
+      const depth=forward*cyaw-radial*syaw;
+      if(depth<.07)return null;
+      const right=radial*cyaw+forward*syaw,up=r*Math.sin(angle);
+      return [w*.5+lens*(right*cr+up*sr)/depth,h*.5-lens*(up*cr-right*sr)/depth];
+    }
+    function trace(n,sample){
+      ctx.beginPath();let connected=false;
+      for(let i=0;i<=n;i++){
+        const xy=sample(i/n);
+        if(xy){if(connected)ctx.lineTo(...xy);else ctx.moveTo(...xy);}
+        connected=!!xy;
+      }
+      ctx.stroke();
+    }
+    ctx.save();ctx.globalAlpha=weight;
+    const mist=ctx.createRadialGradient(w*.34,h*.52,0,w*.45,h*.5,Math.max(w,h)*.90);
+    mist.addColorStop(0,'#071418');mist.addColorStop(.5,'#213238');mist.addColorStop(1,'#071318');
+    ctx.fillStyle=mist;ctx.fillRect(0,0,w,h);ctx.lineCap='round';
+    const pitch=tau/stations,step=heading/pitch;
+    for(let j=7;j>=0;j--){
+      const station=Math.floor(step)+j,arc=(station-step)*pitch;
+      if(arc<-.08)continue;
+      const seam=station*Math.PI/4+.5*Math.sin(3*station*pitch);
+      const alpha=.18+.48*(1-j/8);
+      ctx.strokeStyle='rgba(173,223,231,'+alpha+')';
+      ctx.lineWidth=Math.min(5,Math.max(.75,lens*.0035/Math.max(.15,trackRadius*Math.sin(arc))));
+      trace(68,u=>project(arc,seam+u*tau*.8,tubeRadius));
+      ctx.strokeStyle='#d3f7fb';
+      trace(10,u=>project(arc,seam+tau*(.86+.04*u),tubeRadius-.006));
+    }
+    for(let rail=0;rail<12;rail++){
+      const theta=tau*rail/12;
+      const line=u=>{
+        const a=.017+u*1.25;
+        return project(a,theta+.24*Math.sin(heading*2+2*a+theta),.273);
+      };
+      ctx.lineWidth=rail%3===0?4.4:1.4;
+      ctx.strokeStyle=rail%3===0?'rgba(159,224,234,.34)':'rgba(133,198,210,.19)';
+      trace(46,line);
+      if(rail%3===0){
+        ctx.lineWidth=1.6;ctx.strokeStyle='#d9fbff';trace(46,line);
+      }
+    }
+    ctx.restore();
+  }
   function draw(now){
     id=0;
     if(document.hidden)return;
@@ -32,6 +88,9 @@
     const span=Math.min(w,h),cx=w*(.50-.10*flight),cy=h*.5;
     const zoom=.5+.48*flight;
     ctx.clearRect(0,0,w,h);
+    if(flight>0&&!world.classList.contains('live')&&!reduced){
+      drawTunnel(flight,pos<3?(pos-3)*.7:pos-3);
+    }
     for(const g of grains){
       const travel=g.depth-distance*g.speed;
       const z=.03+travel-Math.floor(travel);
