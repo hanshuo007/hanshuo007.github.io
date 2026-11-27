@@ -3,6 +3,7 @@
   const ctx=field.getContext('2d');
   if(!ctx)return;
   const motion=matchMedia('(prefers-reduced-motion: reduce)');
+  const mobile=matchMedia('(pointer: coarse)');
   let seed=1705;
   function random(){seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296;}
   const grains=Array.from({length:310},()=>({
@@ -77,7 +78,7 @@
     id=0;
     if(document.hidden)return;
     const dt=last?Math.min(.08,(now-last)/1000):0;last=now;
-    const reduced=motion.matches;
+    const reduced=motion.matches && !mobile.matches;
     if(!reduced)time+=dt;
     const pos=Number(world.dataset.position)||0;
     const flight=smooth(2.73,3,pos)*(1-smooth(3.915,4,pos));
@@ -127,8 +128,8 @@
     field.width=Math.round(w*ratio);field.height=Math.round(h*ratio);ctx.setTransform(ratio,0,0,ratio,0,0);
     queue();
   }
-  window.addEventListener('resize',resize);window.addEventListener('scroll',()=>{if(motion.matches)queue();},{passive:true});
-  motion.addEventListener('change',queue);
+  window.addEventListener('resize',resize);window.addEventListener('scroll',()=>{if(motion.matches&&!mobile.matches)queue();},{passive:true});
+  motion.addEventListener('change',queue);mobile.addEventListener('change',queue);
   document.addEventListener('visibilitychange',()=>{cancelAnimationFrame(id);id=last=0;queue();});
   resize();
 })();
